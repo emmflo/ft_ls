@@ -130,6 +130,25 @@ t_list	*ft_filterlist(t_list *files, char *toptions)
 		return (ft_lstfilter(files, &ft_filter_dot));
 }
 
+void	ft_dir(char *path, char *toptions);
+void	ft_recursive(t_list *files, char *toptions)
+{
+	char	*str;
+
+	while (files != NULL)
+	{
+		if ((((t_file*)files->content)->stat.st_mode & S_IFMT) == S_IFDIR)
+		{
+			ft_putchar('\n');
+			str = make_path(((t_file*)files->content)->path, ((t_file*)files->content)->dirent.d_name);
+			ft_putstr(str);
+			ft_putstr(":\n");
+			ft_dir(str, toptions);
+		}
+		files = files->next;
+	}
+}
+
 t_list	*ft_makefilelist(char *path, DIR *dir);
 void	ft_dir(char *path, char *toptions)
 {
@@ -144,6 +163,8 @@ void	ft_dir(char *path, char *toptions)
 	files = ft_filterlist(files, toptions);
 	files = ft_sortfiles(files, toptions);
 	ft_displayls(files, toptions);
+	if (toptions[o_R])
+		ft_recursive(files, toptions);
 }
 
 t_list	*ft_makefilelist(char *path, DIR *dir)
@@ -194,7 +215,7 @@ void	ft_ls(char *options, t_list *dirs)
 	lsopt(options, toptions);
 	if (dirs == NULL)
 		ft_dir("./", toptions);
-	if (dirs->next == NULL)
+	else if (dirs->next == NULL)
 		ft_dir(dirs->content, toptions);
 	else
 	{
