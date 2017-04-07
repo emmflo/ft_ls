@@ -195,7 +195,7 @@ void	ft_putstr_fixed(char *str, int column_size, int right)
 		ft_putstr(str);
 }
 
-t_column_sizes	*ft_get_column_size(t_list *files);
+t_column_sizes	*ft_get_column_size(t_list *files, char *toptions);
 char	*ft_permission_to_str(struct stat *buff_stat)
 {
 	char	*permissions;
@@ -275,7 +275,10 @@ void	print_date(struct stat *buff_stat, char *toptions)
 		str = ctime(&(buff_stat->st_atimespec.tv_sec));
 	else
 		str = ctime(&(buff_stat->st_mtimespec.tv_sec));
-	str[ft_strlen(str) - 9] = '\0';
+	if (toptions[o_T])
+		str[ft_strlen(str) - 1] = '\0';
+	else
+		str[ft_strlen(str) - 9] = '\0';
 	ft_putstr(str + 4);
 	ft_putchar(' ');
 }
@@ -294,12 +297,18 @@ void	ft_display_l_file(t_list *file, t_column_sizes *column_sizes, char *toption
 	ft_putstr(" ");
 	if (!toptions[o_g])
 	{
-		ft_putstr_fixed(getpwuid(buff_stat->st_uid)->pw_name, column_sizes->user, 0);
+		if (toptions[o_n])
+			ft_putnbr_fixed(buff_stat->st_uid, column_sizes->user, 0);
+		else
+			ft_putstr_fixed(getpwuid(buff_stat->st_uid)->pw_name, column_sizes->user, 0);
 		ft_putstr("  ");
 	}
 	if (!toptions[o_o])
 	{
-		ft_putstr_fixed(getgrgid(buff_stat->st_gid)->gr_name, column_sizes->group, 0);
+		if (toptions[o_n])
+			ft_putnbr_fixed(buff_stat->st_gid, column_sizes->group, 0);
+		else
+			ft_putstr_fixed(getgrgid(buff_stat->st_gid)->gr_name, column_sizes->group, 0);
 		ft_putstr("  ");
 	}
 	ft_putnbr_fixed(buff_stat->st_size, column_sizes->size, 1);
@@ -333,7 +342,7 @@ void	ft_display_l(t_list *files, char *toptions)
 	t_column_sizes	*column_sizes;
 	long long int	total;
 
-	column_sizes = ft_get_column_size(files);
+	column_sizes = ft_get_column_size(files, toptions);
 	total = ft_get_total(files);
 	ft_putstr("total ");
 	ft_putnbr(total);
@@ -367,7 +376,7 @@ int		ft_nbrsize(int nb)
 	return (i + neg);
 }
 
-t_column_sizes	*ft_get_column_size(t_list *files)
+t_column_sizes	*ft_get_column_size(t_list *files, char *toptions)
 {
 	int	tmp;
 	t_column_sizes	*column_sizes;
@@ -380,9 +389,15 @@ t_column_sizes	*ft_get_column_size(t_list *files)
 		column_sizes->nlink = column_sizes->nlink < tmp ? tmp : column_sizes->nlink;
 		tmp = ft_nbrsize(((t_file*)files->content)->stat.st_size);	
 		column_sizes->size = column_sizes->size < tmp ? tmp : column_sizes->size;
-		tmp = ft_strlen(getpwuid(((t_file*)files->content)->stat.st_uid)->pw_name);
+		if (toptions[o_n])
+			tmp = ft_nbrsize(((t_file*)files->content)->stat.st_uid);
+		else
+			tmp = ft_strlen(getpwuid(((t_file*)files->content)->stat.st_uid)->pw_name);
 		column_sizes->user = column_sizes->user < tmp ? tmp : column_sizes->user;
-		tmp = ft_strlen(getgrgid(((t_file*)files->content)->stat.st_gid)->gr_name);
+		if (toptions[o_n])
+			tmp = ft_nbrsize(((t_file*)files->content)->stat.st_gid);
+		else
+			tmp = ft_strlen(getgrgid(((t_file*)files->content)->stat.st_gid)->gr_name);
 		column_sizes->group = column_sizes->group < tmp ? tmp : column_sizes->group;
 		files = files->next;
 	}
