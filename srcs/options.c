@@ -10,6 +10,10 @@ void	ft_override_opt(char opt, char *toptions)
 		toptions[o_x] = 0;
 		toptions[o_l] = 0;
 	}
+	if (opt == 'f')
+		toptions[o_a] = 1;
+	if (opt == 'g')
+		toptions[o_l] = 1;
 }
 
 char	*lsopt(char *options, char *toptions)
@@ -17,7 +21,7 @@ char	*lsopt(char *options, char *toptions)
 	char	*pos;
 	char	*valid_options;
 
-	valid_options = ft_strdup("lRartAxC1S ");
+	valid_options = ft_strdup("lRartAxC1SFfg ");
 	while (*options != '\0')
 	{
 		if ((pos = ft_strchr(valid_options, *options)) != NULL)

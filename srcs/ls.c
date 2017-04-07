@@ -78,7 +78,9 @@ int		ft_st_sizecmp_r(void *a, void *b)
 
 t_list	*ft_sortfiles(t_list *files, char *toptions)
 {
-	if (toptions[o_S])
+	if (toptions[o_f])
+		return (files);
+	else if (toptions[o_S])
 	{
 		if (toptions[o_r])
 			return (ft_merge_sort(files, &ft_st_sizecmp_r));
@@ -192,12 +194,18 @@ void	ft_ls(char *options, t_list *dirs)
 	lsopt(options, toptions);
 	if (dirs == NULL)
 		ft_dir("./", toptions);
+	if (dirs->next == NULL)
+		ft_dir(dirs->content, toptions);
 	else
 	{
 		while (dirs != NULL)
 		{
+			ft_putstr(dirs->content);
+			ft_putstr(":\n");
 			ft_dir(dirs->content, toptions);
 			dirs = dirs->next;
+			if (dirs != NULL)
+				ft_putchar('\n');
 		}
 	}
 }

@@ -9,7 +9,7 @@
 # include <pwd.h>
 # include <grp.h>
 # include <time.h>
-# define NB_OPTIONS 11
+# define NB_OPTIONS 14
 //# define st_mtimespec st_mtim
 
 t_list	*ft_merge(t_list *a, t_list *b, int cmp(void *, void *));
@@ -18,7 +18,7 @@ int		ft_lstlen(t_list *list);
 char	*lsopt(char *options, char *toptions);
 void	opt_error(char option);
 void	ft_ls(char *options, t_list *dirs);
-enum	e_options { o_l, o_R, o_a, o_r, o_t , o_A, o_x, o_C, o_1, o_S, not_first};
+enum	e_options { o_l, o_R, o_a, o_r, o_t , o_A, o_x, o_C, o_1, o_S, o_F, o_f, o_g, not_first };
 void	ft_displayls(t_list *files, char *toptions);
 char	*make_path(char *path, char *name);
 int		ft_check_errno(char *pre);
