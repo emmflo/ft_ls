@@ -1,22 +1,30 @@
 #include "ft_ls.h"
 #include <stdio.h>
 
-char	*lsopt(char *options)
+void	ft_override_opt(char opt, char *toptions)
+{
+	if (opt == '1' || opt == 'C' || opt == 'x' || opt == 'l')
+	{
+		toptions[o_1] = 0;
+		toptions[o_C] = 0;
+		toptions[o_x] = 0;
+		toptions[o_l] = 0;
+	}
+}
+
+char	*lsopt(char *options, char *toptions)
 {
 	char	*pos;
-	int		i;
-	char	*toptions;
 	char	*valid_options;
 
-	toptions = ft_strnew(NB_OPTIONS);
-	valid_options = ft_strdup("lRartAxC ");
-	i = 0;
-	while (i < NB_OPTIONS)
-		toptions[i++] = 0;
+	valid_options = ft_strdup("lRartAxC1 ");
 	while (*options != '\0')
 	{
 		if ((pos = ft_strchr(valid_options, *options)) != NULL)
+		{
+			ft_override_opt(*pos, toptions);
 			toptions[pos - valid_options] = 1;
+		}
 		else
 			opt_error(*options);
 		options++;

@@ -155,8 +155,14 @@ t_list	*ft_makefilelist(char *path, DIR *dir)
 void	ft_ls(char *options, t_list *dirs)
 {
 	char	*toptions;
+	int		i;
 
-	toptions = lsopt(options);
+	i = 0;
+	toptions = ft_strnew(NB_OPTIONS);
+	while (i < NB_OPTIONS)
+		toptions[i++] = 0;
+	ft_get_prefs(toptions);
+	lsopt(options, toptions);
 	if (dirs == NULL)
 		ft_dir("./", toptions);
 	else
