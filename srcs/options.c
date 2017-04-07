@@ -21,7 +21,7 @@ char	*lsopt(char *options, char *toptions)
 	char	*pos;
 	char	*valid_options;
 
-	valid_options = ft_strdup("lRartAxC1SFfg ");
+	valid_options = ft_strdup("lRartAxC1SFfgp ");
 	while (*options != '\0')
 	{
 		if ((pos = ft_strchr(valid_options, *options)) != NULL)

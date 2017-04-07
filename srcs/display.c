@@ -27,6 +27,8 @@ char	*ft_str_name(t_list *files, char *toptions)
 		if ((buff_stat->st_mode & S_IFMT) == S_IFIFO)
 			ft_strcat(str, "|");
 	}
+	else if (toptions[o_p] && (buff_stat->st_mode & S_IFMT) == S_IFDIR)
+		ft_strcat(str, "/");
 	return (str);
 }
 
