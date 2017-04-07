@@ -29,26 +29,37 @@ int		ft_d_namecmp_r(void *a, void *b)
 	return (ft_d_namecmp(b, a));
 }
 
+int		ft_st_timcmp(struct timespec *a, struct timespec *b)
+{
+	if (a->tv_sec < b->tv_sec)
+		return (1);
+	else if (a->tv_sec > b->tv_sec)
+		return (-1);
+	else
+	{
+		if (a->tv_nsec < b->tv_nsec)
+			return (1);
+		else if (a->tv_nsec > b->tv_nsec)
+			return (-1);
+		else
+			return (0);
+			return (ft_d_namecmp(a, b));
+	}
+}
+
 int		ft_st_mtimcmp(void *a, void *b)
 {
+	int		ret;
 	struct stat		*stat1;
 	struct stat		*stat2;
 
 	stat1 = &((t_file*)a)->stat;
 	stat2 = &((t_file*)b)->stat;
-	if (stat1->st_mtimespec.tv_sec < stat2->st_mtimespec.tv_sec)
-		return (1);
-	else if (stat1->st_mtimespec.tv_sec > stat2->st_mtimespec.tv_sec)
-		return (-1);
+	ret = ft_st_timcmp(&stat1->st_mtimespec, &stat2->st_mtimespec);
+	if (ret == 0)
+		return (ft_d_namecmp(a, b));
 	else
-	{
-		if (stat1->st_mtimespec.tv_nsec < stat2->st_mtimespec.tv_nsec)
-			return (1);
-		else if (stat1->st_mtimespec.tv_nsec > stat2->st_mtimespec.tv_nsec)
-			return (-1);
-		else
-			return (ft_d_namecmp(a, b));
-	}
+		return (ret);
 }
 
 int		ft_st_mtimcmp_r(void *a, void *b)
@@ -56,6 +67,65 @@ int		ft_st_mtimcmp_r(void *a, void *b)
 	return (ft_st_mtimcmp(b, a));
 }
 
+int		ft_st_atimcmp(void *a, void *b)
+{
+	int		ret;
+	struct stat		*stat1;
+	struct stat		*stat2;
+
+	stat1 = &((t_file*)a)->stat;
+	stat2 = &((t_file*)b)->stat;
+	ret = ft_st_timcmp(&stat1->st_atimespec, &stat2->st_atimespec);
+	if (ret == 0)
+		return (ft_d_namecmp(a, b));
+	else
+		return (ret);
+}
+
+int		ft_st_atimcmp_r(void *a, void *b)
+{
+	return (ft_st_atimcmp(b, a));
+}
+
+int		ft_st_ctimcmp(void *a, void *b)
+{
+	int		ret;
+	struct stat		*stat1;
+	struct stat		*stat2;
+
+	stat1 = &((t_file*)a)->stat;
+	stat2 = &((t_file*)b)->stat;
+	ret = ft_st_timcmp(&stat1->st_ctimespec, &stat2->st_ctimespec);
+	if (ret == 0)
+		return (ft_d_namecmp(a, b));
+	else
+		return (ret);
+}
+
+int		ft_st_ctimcmp_r(void *a, void *b)
+{
+	return (ft_st_ctimcmp(b, a));
+}
+
+int		ft_st_btimcmp(void *a, void *b)
+{
+	int		ret;
+	struct stat		*stat1;
+	struct stat		*stat2;
+
+	stat1 = &((t_file*)a)->stat;
+	stat2 = &((t_file*)b)->stat;
+	ret = ft_st_timcmp(&stat1->st_birthtimespec, &stat2->st_birthtimespec);
+	if (ret == 0)
+		return (ft_d_namecmp(a, b));
+	else
+		return (ret);
+}
+
+int		ft_st_btimcmp_r(void *a, void *b)
+{
+	return (ft_st_btimcmp(b, a));
+}
 int		ft_st_sizecmp(void *a, void *b)
 {
 	struct stat		*stat1;
@@ -76,6 +146,38 @@ int		ft_st_sizecmp_r(void *a, void *b)
 	return (ft_st_sizecmp(b, a));
 }
 
+t_list	*ft_sortfiles_bytime(t_list *files, char *toptions)
+{
+	if (toptions[o_c])
+	{
+		if (toptions[o_r])
+			return (ft_merge_sort(files, &ft_st_ctimcmp_r));
+		else
+			return (ft_merge_sort(files, &ft_st_ctimcmp));
+	}
+	if (toptions[o_u])
+	{
+		if (toptions[o_r])
+			return (ft_merge_sort(files, &ft_st_atimcmp_r));
+		else
+			return (ft_merge_sort(files, &ft_st_atimcmp));
+	}
+	if (toptions[o_U])
+	{
+		if (toptions[o_r])
+			return (ft_merge_sort(files, &ft_st_btimcmp_r));
+		else
+			return (ft_merge_sort(files, &ft_st_btimcmp));
+	}
+	else
+	{
+		if (toptions[o_r])
+			return (ft_merge_sort(files, &ft_st_mtimcmp_r));
+		else
+			return (ft_merge_sort(files, &ft_st_mtimcmp));
+	}
+}
+
 t_list	*ft_sortfiles(t_list *files, char *toptions)
 {
 	if (toptions[o_f])
@@ -88,12 +190,7 @@ t_list	*ft_sortfiles(t_list *files, char *toptions)
 			return (ft_merge_sort(files, &ft_st_sizecmp));
 	}
 	else if (toptions[o_t])
-	{
-		if (toptions[o_r])
-			return (ft_merge_sort(files, &ft_st_mtimcmp_r));
-		else
-			return (ft_merge_sort(files, &ft_st_mtimcmp));
-	}
+		return (ft_sortfiles_bytime(files, toptions));
 	else
 	{
 		if (toptions[o_r])
@@ -134,13 +231,17 @@ void	ft_dir(char *path, char *toptions);
 void	ft_recursive(t_list *files, char *toptions)
 {
 	char	*str;
+	char	*name;
 
 	while (files != NULL)
 	{
-		if ((((t_file*)files->content)->stat.st_mode & S_IFMT) == S_IFDIR)
+		name = ((t_file*)files->content)->dirent.d_name;
+		if ((((t_file*)files->content)->stat.st_mode & S_IFMT) == S_IFDIR &&
+				ft_strcmp(name, ".") != 0 &&
+				ft_strcmp(name, "..") != 0)
 		{
 			ft_putchar('\n');
-			str = make_path(((t_file*)files->content)->path, ((t_file*)files->content)->dirent.d_name);
+			str = make_path(((t_file*)files->content)->path, name);
 			ft_putstr(str);
 			ft_putstr(":\n");
 			ft_dir(str, toptions);
