@@ -9,7 +9,7 @@ char	*lsopt(char *options)
 	char	*valid_options;
 
 	toptions = ft_strnew(NB_OPTIONS);
-	valid_options = ft_strdup("lRartA ");
+	valid_options = ft_strdup("lRartAxC ");
 	i = 0;
 	while (i < NB_OPTIONS)
 		toptions[i++] = 0;

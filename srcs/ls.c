@@ -17,19 +17,7 @@ char	*make_path(char *path, char *name)
 	return (str);
 }
 
-int		check_error(char *pre)
-{
-	if (errno != 0)
-	{
-		ft_putstr("ls: ");
-		ft_putstr(pre);
-		ft_putstr(": ");
-		ft_putstr(strerror(errno));
-		ft_putchar('\n');
-		return (-1);
-	}
-	return (0);
-}
+
 
 int		ft_d_namecmp(void *a, void *b)
 {
@@ -121,17 +109,12 @@ void	ft_dir(char *path, char *toptions)
 
 	errno = 0;
 	dir = opendir(path);
-	if (check_error(path))
+	if (ft_check_errno(path))
 		return ;
 	files = ft_makefilelist(path, dir);
 	files = ft_filterlist(files, toptions);
 	files = ft_sortfiles(files, toptions);
-	while (files != NULL)
-	{
-		printf("%s\n", ((t_file*)files->content)->dirent.d_name);
-		files = files->next;
-	}
-	toptions = NULL;
+	ft_displayls(files, toptions);
 }
 
 t_list	*ft_makefilelist(char *path, DIR *dir)

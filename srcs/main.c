@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 18:19:23 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/06 16:51:59 by emmflo           ###   ########.fr       */
+/*   Updated: 2017/04/07 18:50:49 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int		main(int argc, char *argv[])
 	char	options[100];
 	char	*str;
 
+	ft_get_prefs();
 	i = 1;
 	options[0] = '\0';
 	dirs = NULL;

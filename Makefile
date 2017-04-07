@@ -5,6 +5,8 @@ OBJLIST := \
 	errors.o \
 	main.o \
 	sort.o \
+	display.o \
+	prefs.o \
 	ls.o
 OBJS := $(addprefix $(OBJDIR)/,$(OBJLIST))
 SRCS := $(addprefix $(SRCDIR)/,$(OBJLIST))
