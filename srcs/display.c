@@ -4,14 +4,56 @@
 
 extern int	g_columns;
 
+int		ft_nbrsize(int nb);
+
+/*
+char	*ft_itoa(int nb)
+{
+	int		len;
+	char	*str;
+	int	i;
+	int	neg;
+
+	len = ft_nbrsize(nb);
+	str = ft_strnew(len);
+	neg = 0;
+	if (nb == 0)
+		return (strcpy(str, "0"));
+	if (nb < 0)
+	{
+		nb = -nb;
+		neg = 1;
+	}
+	i = 0;
+	while (nb > 0)
+	{
+		nb /= 10;
+		i++;
+	}
+	return (i + neg);
+}*/
+
+void	ft_putino(t_list *files)
+{
+	ft_putnbr(((t_file*)files->content)->stat.st_ino);
+	ft_putchar(' ');
+}
+
 char	*ft_str_name(t_list *files, char *toptions)
 {
 	char		*str;
 	struct stat	*buff_stat;
+	int			ino_len;
 
-	str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name) + 1);
+	if (toptions[o_i])
+		ino_len = ft_nbrsize(((t_file*)files->content)->stat.st_ino);
+	else
+		ino_len = 0;
+	str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name) + ino_len + 1);
+	str[0] = '\0';
 	buff_stat = &((t_file*)files->content)->stat;
-	ft_strcpy(str, ((t_file*)files->content)->dirent.d_name);
+	//ft_strcat(str, ft_itoa(((t_file*)files->content)->stat.st_ino));
+	ft_strcat(str, ((t_file*)files->content)->dirent.d_name);
 	if (toptions[o_F])
 	{
 		if ((buff_stat->st_mode & S_IFMT) == S_IFDIR)
@@ -41,6 +83,8 @@ void	ft_display_1(t_list *files, char *toptions)
 {
 	while (files != NULL)
 	{
+		if (toptions[o_i])
+			ft_putino(files);
 		ft_display_name(files, toptions);
 		ft_putchar('\n');
 		files = files->next;
@@ -51,6 +95,8 @@ void	ft_display_m(t_list *files, char *toptions)
 {
 	while (files != NULL)
 	{
+		if (toptions[o_i])
+			ft_putino(files);
 		ft_display_name(files, toptions);
 		files = files->next;
 		if (files != NULL)
@@ -90,6 +136,8 @@ void	ft_display_x(t_list *files, char *toptions)
 	i = 0;
 	while (files != NULL)
 	{
+		if (toptions[o_i])
+			ft_putino(files);
 		str = ft_str_name(files, toptions);
 		len = ft_strlen(str);
 		ft_putstr(str);
@@ -151,6 +199,8 @@ void	ft_display_C(t_list *files, char *toptions)
 		j = i;
 		while (j < tab_len)
 		{
+			if (toptions[o_i])
+				ft_putino(tab[j]);
 			str = ft_str_name(tab[j], toptions);
 			len = ft_strlen(str);
 			ft_putstr(str);
@@ -166,7 +216,6 @@ void	ft_display_C(t_list *files, char *toptions)
 	}
 }
 
-int		ft_nbrsize(int nb);
 void	ft_putnbr_fixed(int nb, int column_size, int right)
 {
 	column_size -= ft_nbrsize(nb);
@@ -290,6 +339,8 @@ void	ft_display_l_file(t_list *file, t_column_sizes *column_sizes, char *toption
 
 	file_content = ((t_file*)file->content);
 	buff_stat = &file_content->stat;
+	if (toptions[o_i])
+		ft_putino(file);
 	ft_putchar(ft_type_to_char(buff_stat));
 	ft_putstr(ft_permission_to_str(buff_stat));
 	ft_putstr("  ");
