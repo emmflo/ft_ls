@@ -15,16 +15,17 @@ CC := clang
 INCDIR := -I./libft/includes -I./includes
 CFLAGS := -Wall -Wextra -Werror $(INCDIR)
 NAME := ft_ls
+DEBUG := -g
 
 .PHONY : all clean fclean re libft libft_clean libft_fclean
 
 all : $(NAME)
 	
 $(NAME) : libft/libft.a $(OBJS)
-	$(CC) $(OBJS) -o $@ $(LIB)
+	$(CC) $(DEBUG) $(OBJS) -o $@ $(LIB)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(DEBUG) $(CFLAGS) -c $< -o $@
 
 $(OBJS): | $(OBJDIR)
 

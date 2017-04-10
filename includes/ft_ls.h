@@ -23,6 +23,9 @@ void	ft_displayls(t_list *files, char *toptions);
 char	*make_path(char *path, char *name);
 int		ft_check_errno(char *pre);
 void	ft_get_prefs(char *toptions);
+void	ft_dir(char *path, char *toptions);
+t_list	*ft_makefilelist(char *path, DIR *dir);
+int		ft_nbrsize(int nb);
 
 typedef struct s_file {
 	char			*path;

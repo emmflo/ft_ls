@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ls.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/04/10 19:37:08 by eflorenz          #+#    #+#             */
+/*   Updated: 2017/04/10 23:17:41 by eflorenz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 #include <stdio.h>
 
@@ -5,9 +17,9 @@ char	*make_path(char *path, char *name)
 {
 	char	*str;
 	int		offset;
-	
+
 	offset = 0;
-	if (path[ft_strlen(path)-1] != '/')
+	if (path[ft_strlen(path) - 1] != '/')
 		offset = 1;
 	str = ft_strnew(ft_strlen(path) + ft_strlen(name) + offset);
 	ft_strcat(str, path);
@@ -17,11 +29,10 @@ char	*make_path(char *path, char *name)
 	return (str);
 }
 
-
-
 int		ft_d_namecmp(void *a, void *b)
 {
-	return (ft_strcmp(((t_file*)a)->dirent.d_name, ((t_file*)b)->dirent.d_name));
+	return (ft_strcmp(((t_file*)a)->dirent.d_name,
+				((t_file*)b)->dirent.d_name));
 }
 
 int		ft_d_namecmp_r(void *a, void *b)
@@ -43,13 +54,13 @@ int		ft_st_timcmp(struct timespec *a, struct timespec *b)
 			return (-1);
 		else
 			return (0);
-			return (ft_d_namecmp(a, b));
+		return (ft_d_namecmp(a, b));
 	}
 }
 
 int		ft_st_mtimcmp(void *a, void *b)
 {
-	int		ret;
+	int				ret;
 	struct stat		*stat1;
 	struct stat		*stat2;
 
@@ -69,7 +80,7 @@ int		ft_st_mtimcmp_r(void *a, void *b)
 
 int		ft_st_atimcmp(void *a, void *b)
 {
-	int		ret;
+	int				ret;
 	struct stat		*stat1;
 	struct stat		*stat2;
 
@@ -89,7 +100,7 @@ int		ft_st_atimcmp_r(void *a, void *b)
 
 int		ft_st_ctimcmp(void *a, void *b)
 {
-	int		ret;
+	int				ret;
 	struct stat		*stat1;
 	struct stat		*stat2;
 
@@ -109,7 +120,7 @@ int		ft_st_ctimcmp_r(void *a, void *b)
 
 int		ft_st_btimcmp(void *a, void *b)
 {
-	int		ret;
+	int				ret;
 	struct stat		*stat1;
 	struct stat		*stat2;
 
@@ -126,6 +137,7 @@ int		ft_st_btimcmp_r(void *a, void *b)
 {
 	return (ft_st_btimcmp(b, a));
 }
+
 int		ft_st_sizecmp(void *a, void *b)
 {
 	struct stat		*stat1;
@@ -146,36 +158,48 @@ int		ft_st_sizecmp_r(void *a, void *b)
 	return (ft_st_sizecmp(b, a));
 }
 
+t_list	*ft_sortfiles_bytime_c(t_list *files, char *toptions)
+{
+	if (toptions[o_r])
+		return (ft_merge_sort(files, &ft_st_ctimcmp_r));
+	else
+		return (ft_merge_sort(files, &ft_st_ctimcmp));
+}
+
+t_list	*ft_sortfiles_bytime_u(t_list *files, char *toptions)
+{
+	if (toptions[o_r])
+		return (ft_merge_sort(files, &ft_st_atimcmp_r));
+	else
+		return (ft_merge_sort(files, &ft_st_atimcmp));
+}
+
+t_list	*ft_sortfiles_bytime_b(t_list *files, char *toptions)
+{
+	if (toptions[o_r])
+		return (ft_merge_sort(files, &ft_st_btimcmp_r));
+	else
+		return (ft_merge_sort(files, &ft_st_btimcmp));
+}
+
+t_list	*ft_sortfiles_bytime_m(t_list *files, char *toptions)
+{
+	if (toptions[o_r])
+		return (ft_merge_sort(files, &ft_st_mtimcmp_r));
+	else
+		return (ft_merge_sort(files, &ft_st_mtimcmp));
+}
+
 t_list	*ft_sortfiles_bytime(t_list *files, char *toptions)
 {
 	if (toptions[o_c])
-	{
-		if (toptions[o_r])
-			return (ft_merge_sort(files, &ft_st_ctimcmp_r));
-		else
-			return (ft_merge_sort(files, &ft_st_ctimcmp));
-	}
-	if (toptions[o_u])
-	{
-		if (toptions[o_r])
-			return (ft_merge_sort(files, &ft_st_atimcmp_r));
-		else
-			return (ft_merge_sort(files, &ft_st_atimcmp));
-	}
-	if (toptions[o_U])
-	{
-		if (toptions[o_r])
-			return (ft_merge_sort(files, &ft_st_btimcmp_r));
-		else
-			return (ft_merge_sort(files, &ft_st_btimcmp));
-	}
+		return (ft_sortfiles_bytime_c(files, toptions));
+	else if (toptions[o_u])
+		return (ft_sortfiles_bytime_u(files, toptions));
+	else if (toptions[o_U])
+		return (ft_sortfiles_bytime_b(files, toptions));
 	else
-	{
-		if (toptions[o_r])
-			return (ft_merge_sort(files, &ft_st_mtimcmp_r));
-		else
-			return (ft_merge_sort(files, &ft_st_mtimcmp));
-	}
+		return (ft_sortfiles_bytime_m(files, toptions));
 }
 
 t_list	*ft_sortfiles(t_list *files, char *toptions)
@@ -208,7 +232,7 @@ int		ft_filter_dot(t_list *elem)
 		return (1);
 }
 
-int		ft_filter_A(t_list *elem)
+int		ft_filter_a_(t_list *elem)
 {
 	if (ft_strcmp(((t_file*)elem->content)->dirent.d_name, ".") == 0 ||
 		ft_strcmp(((t_file*)elem->content)->dirent.d_name, "..") == 0)
@@ -222,12 +246,11 @@ t_list	*ft_filterlist(t_list *files, char *toptions)
 	if (toptions[o_a])
 		return (files);
 	else if (toptions[o_A])
-		return (ft_lstfilter(files, &ft_filter_A));
+		return (ft_lstfilter(files, &ft_filter_a_));
 	else
 		return (ft_lstfilter(files, &ft_filter_dot));
 }
 
-void	ft_dir(char *path, char *toptions);
 void	ft_recursive(t_list *files, char *toptions)
 {
 	char	*str;
@@ -245,36 +268,65 @@ void	ft_recursive(t_list *files, char *toptions)
 			ft_putstr(str);
 			ft_putstr(":\n");
 			ft_dir(str, toptions);
+			free(str);
 		}
 		files = files->next;
 	}
 }
 
-t_list	*ft_makefilelist(char *path, DIR *dir);
+void	ft_delfile(void *file, size_t size)
+{
+	size = 0;
+	//free(((t_file*)file)->stat);
+	//free(((t_file*)file)->dirent);
+	ft_strdel(&(((t_file*)file)->path));
+	free((t_file*)file);
+}
+
 void	ft_dir(char *path, char *toptions)
 {
 	DIR		*dir;
 	t_list	*files;
+	t_list	*tmp;
 
 	errno = 0;
 	dir = opendir(path);
 	if (ft_check_errno(path))
 		return ;
 	files = ft_makefilelist(path, dir);
-	files = ft_filterlist(files, toptions);
-	files = ft_sortfiles(files, toptions);
+	tmp = ft_filterlist(files, toptions);
+	ft_lstdel(&files, &ft_delfile);
+	files = ft_sortfiles(tmp, toptions);
 	ft_displayls(files, toptions);
 	if (toptions[o_R])
 		ft_recursive(files, toptions);
+	ft_lstdel(&files, &ft_delfile);
+	closedir(dir);
+}
+
+t_file	*ft_makefile(char *path, struct dirent *dirent)
+{
+	struct stat	*stat;
+	t_file		*file;
+	char		*str;
+
+	stat = malloc(sizeof(struct stat));
+	str = make_path(path, dirent->d_name);
+	lstat(str, stat);
+	free(str);
+	file = malloc(sizeof(*file));
+	file->dirent = *dirent;
+	file->path = ft_strdup(path);
+	file->stat = *stat;
+	free(stat);
+	return (file);
 }
 
 t_list	*ft_makefilelist(char *path, DIR *dir)
 {
 	struct dirent	*dirent;
-	struct stat		*stat;
 	t_list			*files;
 	t_list			*ptr;
-	t_file			*file;
 
 	ptr = NULL;
 	files = NULL;
@@ -283,37 +335,41 @@ t_list	*ft_makefilelist(char *path, DIR *dir)
 		dirent = readdir(dir);
 		if (dirent == NULL)
 			break ;
-		stat = malloc(sizeof(struct stat));
-		lstat(make_path(path, dirent->d_name), stat);
-		file = malloc(sizeof(*file));
-		file->dirent = *dirent;
-		file->path = ft_strdup(path);
-		file->stat = *stat;
 		if (ptr == NULL)
 		{
-			ptr = ft_lstnew(file, sizeof(*file));
+			ptr = ft_lstnew(ft_makefile(path, dirent), sizeof(t_file));
 			files = ptr;
 		}
 		else
 		{
-			ptr->next = ft_lstnew(file, sizeof(*file));
+			ptr->next = ft_lstnew(ft_makefile(path, dirent), sizeof(t_file));
 			ptr = ptr->next;
 		}
 	}
 	return (files);
 }
 
+void	ft_del_dir(void *str, size_t size)
+{
+	//ft_strdel(str);
+	str = NULL;
+	size = 0;
+}
+
 void	ft_ls(char *options, t_list *dirs)
 {
 	char	*toptions;
 	int		i;
+	t_list	*first;
 
 	i = 0;
+	first = dirs;
 	toptions = ft_strnew(NB_OPTIONS);
 	while (i < NB_OPTIONS)
 		toptions[i++] = 0;
 	ft_get_prefs(toptions);
 	lsopt(options, toptions);
+	free(options);
 	if (dirs == NULL)
 		ft_dir("./", toptions);
 	else if (dirs->next == NULL)
@@ -330,4 +386,7 @@ void	ft_ls(char *options, t_list *dirs)
 				ft_putchar('\n');
 		}
 	}
+	if (dirs != NULL)
+		ft_lstdel(&first, &ft_del_dir);
+	ft_strdel(&toptions);
 }

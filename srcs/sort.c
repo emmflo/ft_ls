@@ -3,7 +3,7 @@
 int		ft_lstlen(t_list *list)
 {
 	int	i;
-	
+
 	i = 0;
 	while (list != NULL)
 	{

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   options.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/04/10 19:27:28 by eflorenz          #+#    #+#             */
+/*   Updated: 2017/04/10 22:48:07 by eflorenz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 #include <stdio.h>
 
@@ -40,5 +52,6 @@ char	*lsopt(char *options, char *toptions)
 			opt_error(*options);
 		options++;
 	}
+	ft_strdel(&valid_options);
 	return (toptions);
 }
