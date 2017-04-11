@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/11 13:01:17 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/11 13:46:02 by eflorenz         ###   ########.fr       */
+/*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
+/*   Updated: 2017/04/11 14:15:27 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,8 +261,6 @@ int		ft_filter_errno(t_list *elem)
 void	ft_delfile(void *file, size_t size)
 {
 	size = 0;
-	//free(((t_file*)file)->stat);
-	//free(((t_file*)file)->dirent);
 	ft_strdel(&(((t_file*)file)->path));
 	free((t_file*)file);
 }
@@ -350,38 +348,44 @@ t_list	*ft_makefilelist(char *path, DIR *dir)
 		dirent = readdir(dir);
 		if (dirent == NULL)
 			break ;
-		ft_lstconstruct(&files, &ptr, ft_lstnew(ft_makefile(path, dirent), sizeof(t_file)));
+		ft_lstconstruct(&files, &ptr, ft_lstnew(ft_makefile(path, dirent),
+			sizeof(t_file)));
 	}
 	return (files);
 }
 
 void	ft_deldir(void *str, size_t size)
 {
-	//ft_strdel(str);
 	str = NULL;
 	size = 0;
+}
+
+char	*ft_newtoptions(void)
+{
+	char	*toptions;
+	int		i;
+
+	i = 0;
+	toptions = ft_strnew(NB_OPTIONS);
+	while (i < NB_OPTIONS)
+		toptions[i++] = 0;
+	return (toptions);
 }
 
 void	ft_ls(char *options, t_list *dirs)
 {
 	char	*toptions;
-	int		i;
 	t_list	*first;
 
-	i = 0;
 	first = dirs;
-	toptions = ft_strnew(NB_OPTIONS);
-	while (i < NB_OPTIONS)
-		toptions[i++] = 0;
+	toptions = ft_newtoptions();
 	ft_get_prefs(toptions);
 	lsopt(options, toptions);
-	free(options);
+	ft_strdel(&options);
 	if (dirs == NULL)
 		ft_dir("./", toptions);
 	else if (dirs->next == NULL)
-	{
 		ft_dir(dirs->content, toptions);
-	}
 	else
 	{
 		ft_lstinplacefilter(&dirs, &ft_filter_errno, &ft_deldir);
@@ -395,7 +399,6 @@ void	ft_ls(char *options, t_list *dirs)
 				ft_putchar('\n');
 		}
 	}
-	if (dirs != NULL)
-		ft_lstdel(&first, &ft_deldir);
+	ft_lstdel(&first, &ft_deldir);
 	ft_strdel(&toptions);
 }

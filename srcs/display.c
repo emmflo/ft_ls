@@ -440,13 +440,25 @@ int		ft_nbrsize(int nb)
 	return (i + neg);
 }
 
+t_column_sizes	*ft_new_column_sizes(void)
+{
+	t_column_sizes	*column_sizes;
+
+	if (!(column_sizes = (t_column_sizes*)malloc(sizeof(t_column_sizes))))
+		exit(1);
+	column_sizes->nlink = 0;
+	column_sizes->size = 0;
+	column_sizes->user = 0;
+	column_sizes->group = 0;
+	return (column_sizes);
+}
+
 t_column_sizes	*ft_get_column_size(t_list *files, char *toptions)
 {
 	int	tmp;
 	t_column_sizes	*column_sizes;
 
-	if (!(column_sizes = (t_column_sizes*)malloc(sizeof(t_column_sizes))))
-		exit(1);
+	column_sizes = ft_new_column_sizes();
 	while (files != NULL)
 	{
 		tmp = ft_nbrsize(((t_file*)files->content)->stat.st_nlink);
