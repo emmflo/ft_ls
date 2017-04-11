@@ -58,25 +58,14 @@ char	*ft_F_str(struct stat *buff_stat)
 		return ("");
 }
 
-char	*ft_str_name(t_list *files, char *toptions, int	ino)
+char	*ft_str_name(t_list *files, char *toptions)
 {
 	char		*str;
 	struct stat	*buff_stat;
-	int			ino_len;
 
-	if (ino)
-		ino_len = ft_nbrsize(((t_file*)files->content)->stat.st_ino) + 1;
-	else
-		ino_len = 0;
-	str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name)
-			+ ino_len + 1);
+	str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
 	str[0] = '\0';
 	buff_stat = &((t_file*)files->content)->stat;
-	if (ino)
-	{
-		ft_strcat(str, ft_itoa(buff_stat->st_ino));
-		ft_strcat(str, " ");
-	}
 	ft_strcat(str, ((t_file*)files->content)->dirent.d_name);
 	if (toptions[o_F])
 		ft_strcat(str, ft_F_str(buff_stat));
@@ -89,16 +78,7 @@ void	ft_display_name(t_list *files, char *toptions)
 {
 	char	*str;
 
-	str = ft_str_name(files, toptions, toptions[o_i]);
-	ft_putstr(str);
-	ft_strdel(&str);
-}
-
-void	ft_display_name_not_i(t_list *files, char *toptions)
-{
-	char	*str;
-
-	str = ft_str_name(files, toptions, 0);
+	str = ft_str_name(files, toptions);
 	ft_putstr(str);
 	ft_strdel(&str);
 }
@@ -107,8 +87,8 @@ void	ft_display_1(t_list *files, char *toptions)
 {
 	while (files != NULL)
 	{
-		//if (toptions[o_i])
-			//ft_putino(files);
+		if (toptions[o_i])
+			ft_putino(files);
 		ft_display_name(files, toptions);
 		ft_putchar('\n');
 		files = files->next;
@@ -119,8 +99,8 @@ void	ft_display_m(t_list *files, char *toptions)
 {
 	while (files != NULL)
 	{
-		//if (toptions[o_i])
-		//	ft_putino(files);
+		if (toptions[o_i])
+			ft_putino(files);
 		ft_display_name(files, toptions);
 		files = files->next;
 		if (files != NULL)
@@ -167,7 +147,7 @@ void	ft_display_x(t_list *files, char *toptions)
 	{
 		//if (toptions[o_i])
 		//	ft_putino(files);
-		str = ft_str_name(files, toptions, toptions[o_i]);
+		str = ft_str_name(files, toptions);
 		len = ft_strlen(str);
 		ft_putstr(str);
 		ft_strdel(&str);
@@ -229,9 +209,7 @@ void	ft_display_C(t_list *files, char *toptions)
 		j = i;
 		while (j < tab_len)
 		{
-			//if (toptions[o_i])
-			//	ft_putino(tab[j]);
-			str = ft_str_name(tab[j], toptions, toptions[o_i]);
+			str = ft_str_name(tab[j], toptions);
 			len = ft_strlen(str);
 			ft_putstr(str);
 			ft_strdel(&str);
@@ -398,7 +376,7 @@ void	ft_display_l_file(t_list *file, t_column_sizes *column_sizes, char *toption
 	ft_putnbr_fixed(buff_stat->st_size, column_sizes->size, 1);
 	ft_putstr(" ");
 	print_date(buff_stat, toptions);
-	ft_display_name_not_i(file, toptions);
+	ft_display_name(file, toptions);
 	if (ft_type_to_char(buff_stat) == 'l')
 	{
 		ft_putstr(" -> ");

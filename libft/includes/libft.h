@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 23:12:01 by eflorenz          #+#    #+#             */
-/*   Updated: 2016/11/17 13:49:03 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/11 13:43:29 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,7 @@ void				ft_printstrtab_null(char **tab);
 void				ft_printstrtab(char **tab, size_t size);
 void				ft_tabiter(void **tab, size_t size, void (*f)(void*));
 void				ft_tabiter_null(void **tab, void (*f)(void *elem));
+void				ft_lstconstruct(t_list **first, t_list **last,
+						t_list *new);
 
 #endif

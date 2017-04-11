@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 18:19:23 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/10 21:39:23 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/11 13:45:06 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,8 @@ int		main(int argc, char *argv[])
 	while (i < argc)
 	{
 		str = ft_strdup(argv[i]);
-		if (dirs == NULL)
-		{
-			dirs = ft_lstnew(str, ft_strlen(argv[i]) + 1);
-			ptr = dirs;
-		}
-		else
-			ptr->next = ft_lstnew(str, ft_strlen(argv[i]) + 1);
-		ptr = ptr->next;
+		ft_lstconstruct(&dirs, &ptr, ft_lstnew(str, ft_strlen(argv[i]) + 1));
+		ft_strdel(&str);
 		i++;
 	}
 	ft_ls(options, dirs);

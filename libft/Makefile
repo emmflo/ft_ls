@@ -67,7 +67,8 @@ OBJLIST := \
 	ft_tabiter.o \
 	ft_tabiter_null.o \
 	ft_printstrtab.o \
-	ft_printstrtab_null.o
+	ft_printstrtab_null.o \
+	ft_lstconstruct.o
 OBJS := $(addprefix $(OBJDIR)/,$(OBJLIST))
 CC := clang
 SRCDIR := srcs

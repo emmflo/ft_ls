@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/10 19:37:08 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/10 23:17:41 by eflorenz         ###   ########.fr       */
+/*   Created: 2017/04/11 13:01:17 by eflorenz          #+#    #+#             */
+/*   Updated: 2017/04/11 13:46:02 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,14 +241,40 @@ int		ft_filter_a_(t_list *elem)
 		return (1);
 }
 
-t_list	*ft_filterlist(t_list *files, char *toptions)
+int		ft_filter_errno(t_list *elem)
+{
+	DIR		*dir;
+	int		ret;
+
+	errno = 0;
+	dir = opendir(((char*)elem->content));
+	if (ft_check_errno(((char*)elem->content)))
+		ret = 0;
+	else
+	{
+		ret = 1;
+		closedir(dir);
+	}
+	return (ret);
+}
+
+void	ft_delfile(void *file, size_t size)
+{
+	size = 0;
+	//free(((t_file*)file)->stat);
+	//free(((t_file*)file)->dirent);
+	ft_strdel(&(((t_file*)file)->path));
+	free((t_file*)file);
+}
+
+void	ft_filterlist(t_list **files, char *toptions)
 {
 	if (toptions[o_a])
-		return (files);
+		;
 	else if (toptions[o_A])
-		return (ft_lstfilter(files, &ft_filter_a_));
+		ft_lstinplacefilter(files, &ft_filter_a_, &ft_delfile);
 	else
-		return (ft_lstfilter(files, &ft_filter_dot));
+		ft_lstinplacefilter(files, &ft_filter_dot, &ft_delfile);
 }
 
 void	ft_recursive(t_list *files, char *toptions)
@@ -274,29 +300,18 @@ void	ft_recursive(t_list *files, char *toptions)
 	}
 }
 
-void	ft_delfile(void *file, size_t size)
-{
-	size = 0;
-	//free(((t_file*)file)->stat);
-	//free(((t_file*)file)->dirent);
-	ft_strdel(&(((t_file*)file)->path));
-	free((t_file*)file);
-}
-
 void	ft_dir(char *path, char *toptions)
 {
 	DIR		*dir;
 	t_list	*files;
-	t_list	*tmp;
 
 	errno = 0;
 	dir = opendir(path);
 	if (ft_check_errno(path))
 		return ;
 	files = ft_makefilelist(path, dir);
-	tmp = ft_filterlist(files, toptions);
-	ft_lstdel(&files, &ft_delfile);
-	files = ft_sortfiles(tmp, toptions);
+	ft_filterlist(&files, toptions);
+	files = ft_sortfiles(files, toptions);
 	ft_displayls(files, toptions);
 	if (toptions[o_R])
 		ft_recursive(files, toptions);
@@ -335,21 +350,12 @@ t_list	*ft_makefilelist(char *path, DIR *dir)
 		dirent = readdir(dir);
 		if (dirent == NULL)
 			break ;
-		if (ptr == NULL)
-		{
-			ptr = ft_lstnew(ft_makefile(path, dirent), sizeof(t_file));
-			files = ptr;
-		}
-		else
-		{
-			ptr->next = ft_lstnew(ft_makefile(path, dirent), sizeof(t_file));
-			ptr = ptr->next;
-		}
+		ft_lstconstruct(&files, &ptr, ft_lstnew(ft_makefile(path, dirent), sizeof(t_file)));
 	}
 	return (files);
 }
 
-void	ft_del_dir(void *str, size_t size)
+void	ft_deldir(void *str, size_t size)
 {
 	//ft_strdel(str);
 	str = NULL;
@@ -373,9 +379,12 @@ void	ft_ls(char *options, t_list *dirs)
 	if (dirs == NULL)
 		ft_dir("./", toptions);
 	else if (dirs->next == NULL)
+	{
 		ft_dir(dirs->content, toptions);
+	}
 	else
 	{
+		ft_lstinplacefilter(&dirs, &ft_filter_errno, &ft_deldir);
 		while (dirs != NULL)
 		{
 			ft_putstr(dirs->content);
@@ -387,6 +396,6 @@ void	ft_ls(char *options, t_list *dirs)
 		}
 	}
 	if (dirs != NULL)
-		ft_lstdel(&first, &ft_del_dir);
+		ft_lstdel(&first, &ft_deldir);
 	ft_strdel(&toptions);
 }
