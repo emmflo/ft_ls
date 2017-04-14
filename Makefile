@@ -7,13 +7,16 @@ OBJLIST := \
 	sort.o \
 	display.o \
 	prefs.o \
+	xattr.o \
+	acls.o \
 	ls.o
 OBJS := $(addprefix $(OBJDIR)/,$(OBJLIST))
 SRCS := $(addprefix $(SRCDIR)/,$(OBJLIST))
 LIB := -L libft -lft
 CC := clang
 INCDIR := -I./libft/includes -I./includes
-CFLAGS := -Wall -Wextra -Werror $(INCDIR)
+#CFLAGS := -Wall -Wextra -Werror $(INCDIR)
+CFLAGS := $(INCDIR)
 NAME := ft_ls
 DEBUG := -g
 

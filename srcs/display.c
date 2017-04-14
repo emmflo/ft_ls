@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/13 11:21:10 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/14 13:42:56 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,18 +270,21 @@ char	*ft_init_permission_str(void)
 	char	*permissions;
 	int		i;
 
-	permissions = ft_strnew(9);
+	permissions = ft_strnew(10);
 	i = 0;
 	while (i < 9)
 		permissions[i++] = '-';
-	permissions[9] = '\0';
+	permissions[9] = ' ';
+	permissions[10] = '\0';
 	return (permissions);
 }
 
-char	*ft_permission_to_str(struct stat *buff_stat)
+char	*ft_permission_to_str(t_file *file)
 {
-	char	*permissions;
+	char		*permissions;
+	struct stat	*buff_stat;
 
+	buff_stat = &(file->stat);
 	permissions = ft_init_permission_str();
 	if ((buff_stat->st_mode & S_IRUSR) != 0)
 		permissions[0] = 'r';
@@ -301,6 +304,10 @@ char	*ft_permission_to_str(struct stat *buff_stat)
 		permissions[7] = 'w';
 	if ((buff_stat->st_mode & S_IXOTH) != 0)
 		permissions[8] = 'x';
+	if (file->xattrs != NULL)
+		permissions[9] = '@';
+	else if (file->acl != NULL)
+		permissions[9] = '+';
 	return (permissions);
 }
 
@@ -369,8 +376,8 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs, char *toptions)
 	if (toptions[o_i])
 		ft_putino(file);
 	ft_putchar(ft_type_to_char(buff_stat));
-	ft_putstr(ft_permission_to_str(buff_stat));
-	ft_putstr("  ");
+	ft_putstr(ft_permission_to_str(file_content));
+	ft_putstr(" ");
 	ft_putnbr_fixed(buff_stat->st_nlink, cs->nlink, 1);
 	ft_putstr(" ");
 	if (!toptions[o_g])
@@ -401,6 +408,10 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs, char *toptions)
 		free(str);
 	}
 	ft_putchar('\n');
+	if (toptions[o_at])
+		ft_display_xattrs(file_content);
+	if (toptions[o_e])
+		ft_display_acls(file_content);
 }
 
 long long int	ft_get_total(t_list *files)

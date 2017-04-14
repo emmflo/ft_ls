@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:28 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/10 22:48:07 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/14 13:14:00 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*lsopt(char *options, char *toptions)
 	char	*pos;
 	char	*valid_options;
 
-	valid_options = ft_strdup("lRartAxC1SFfgpmocuUTni");
+	valid_options = ft_strdup("lRartAxC1SFfgpmocuUTni@e");
 	while (*options != '\0')
 	{
 		if ((pos = ft_strchr(valid_options, *options)) != NULL)
