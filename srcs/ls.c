@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/17 16:10:59 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/17 18:59:09 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,10 @@ t_file	*ft_makefile(char *path, struct dirent *dirent)
 	if (!(stat = malloc(sizeof(struct stat))))
 		return NULL;
 	str = make_path(path, dirent->d_name);
+	errno = 0;
 	lstat(str, stat);
+	if (ft_check_errno(dirent->d_name))
+		return (NULL);
 	free(str);
 	file = malloc(sizeof(*file));
 	file->dirent = *dirent;
@@ -343,6 +346,7 @@ t_list	*ft_makefilelist(char *path, DIR *dir)
 	struct dirent	*dirent;
 	t_list			*files;
 	t_list			*ptr;
+	t_file			*file;
 
 	ptr = NULL;
 	files = NULL;
@@ -351,7 +355,8 @@ t_list	*ft_makefilelist(char *path, DIR *dir)
 		dirent = readdir(dir);
 		if (dirent == NULL)
 			break ;
-		ft_lstconstruct(&files, &ptr, ft_lstnew(ft_makefile(path, dirent),
+		if ((file = ft_makefile(path, dirent)) != NULL)
+			ft_lstconstruct(&files, &ptr, ft_lstnew(file,
 			sizeof(t_file)));
 	}
 	return (files);

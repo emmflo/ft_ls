@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/17 17:02:48 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/17 20:51:05 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 #include <stdlib.h>
 
 extern int	g_columns;
+extern char	*g_colors;
+extern char	g_colors_tab[][6];
+extern char	*lscolors;
 
 char	*ft_itoa(int nb)
 {
@@ -69,22 +72,105 @@ char	*ft_f__str(struct stat *buff_stat)
 		return ("");
 }
 
+int		ft_len_name(t_list *files, char *toptions)
+{
+	int		len;
+
+	if (toptions[o_q])
+		len = ft_strlen(ft_str_name_q(files));
+	else if (toptions[o_b] || toptions[o_B])
+		len = ft_strlen(ft_str_name_b(files, toptions));
+	else
+		len = ft_strlen(((t_file*)files->content)->dirent.d_name);
+	if (toptions[o_F])
+		len++;
+	return (len);
+}
+
+int		ft_color_index(char c)
+{
+	char	*addr;
+	if ((addr = ft_strchr(g_colors, c)) != NULL)
+		return (addr - g_colors);
+	else
+		return (18);
+}
+
+char	*ft_make_color_str(int index)
+{
+	char	*str;
+
+	str = ft_strnew(10);
+	ft_strcat(str, g_colors_tab[ft_color_index(lscolors[index * 2])]);
+	ft_strcat(str, g_colors_tab[ft_color_index(ft_toupper(lscolors[index * 2 + 1]))]);
+	return (str);
+}
+
+char	*ft_get_color(struct stat *buff_stat)
+{
+
+	if ((buff_stat->st_mode & S_IFMT) == S_IFDIR)
+	{
+		if ((buff_stat->st_mode & S_IWOTH) != 0)
+		{
+			if ((buff_stat->st_mode & S_ISVTX) != 0)
+				return (ft_make_color_str(9));
+			else
+				return (ft_make_color_str(10));
+		}
+		else
+			return (ft_make_color_str(0));
+	}
+	else if ((buff_stat->st_mode & S_IFMT) == S_IFLNK)
+		return (ft_make_color_str(1));
+	else if ((buff_stat->st_mode & S_IFMT) == S_IFSOCK)
+		return (ft_make_color_str(2));
+	else if ((buff_stat->st_mode & S_IFMT) == S_IFIFO)
+		return (ft_make_color_str(3));
+	else if ((buff_stat->st_mode & S_IFMT) == S_IFREG &&
+			(buff_stat->st_mode & S_IXUSR) != 0)
+	{
+		if ((buff_stat->st_mode & S_ISUID) != 0)
+			return (ft_make_color_str(7));
+		else if ((buff_stat->st_mode & S_ISGID) != 0)
+			return (ft_make_color_str(8));
+		else
+			return (ft_make_color_str(4));
+	}
+	else if ((buff_stat->st_mode & S_IFMT) == S_IFIFO)
+		return (ft_make_color_str(5));
+	else if ((buff_stat->st_mode & S_IFMT) == S_IFCHR)
+		return (ft_make_color_str(6));
+	else
+		return (ft_strdup("\x1b[39m\x1b[49m"));
+}
+
 char	*ft_str_name(t_list *files, char *toptions)
 {
 	char		*str;
+	char		*name;
 	struct stat	*buff_stat;
 
-	//str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
+	buff_stat = &((t_file*)files->content)->stat;
+	str = ft_strnew(ft_len_name(files, toptions) + toptions[o_F] + 20 * toptions[o_G]);
+	str[0] = '\0';
+	if (toptions[o_G])
+		ft_strcat(str, ft_get_color(buff_stat));
 	if (toptions[o_q])
-		str = ft_str_name_q(files);
+		name = ft_str_name_q(files);
 	else if (toptions[o_b] || toptions[o_B])
-		str = ft_str_name_b(files, toptions);
+		name = ft_str_name_b(files, toptions);
 	else
 	{
-		str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
-		ft_strcpy(str, ((t_file*)files->content)->dirent.d_name);
+		name = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
+		ft_strcpy(name, ((t_file*)files->content)->dirent.d_name);
 	}
-	buff_stat = &((t_file*)files->content)->stat;
+	ft_strcat(str, name);
+	if (toptions[o_G])
+	{
+		ft_strcat(str, g_colors_tab[ft_color_index('x')]);
+		ft_strcat(str, g_colors_tab[ft_color_index('X')]);
+	}
 	if (toptions[o_F])
 		ft_strcat(str, ft_f__str(buff_stat));
 	else if (toptions[o_p] && (buff_stat->st_mode & S_IFMT) == S_IFDIR)
@@ -141,7 +227,7 @@ int		ft_get_max_len(t_list *files, char *toptions)
 			ino_len = ft_nbrsize(((t_file*)files->content)->stat.st_ino) + 1;
 		else
 			ino_len = 0;
-		tmp = ft_strlen(ft_str_name(files, toptions)) + ino_len;
+		tmp = ft_len_name(files, toptions) + ino_len;
 		max = tmp > max ? tmp : max;
 		files = files->next;
 	}
@@ -166,7 +252,7 @@ void	ft_display_x(t_list *files, char *toptions)
 		if (toptions[o_i])
 			ft_putino(files);
 		str = ft_str_name(files, toptions);
-		len = ft_strlen(str);
+		len = ft_len_name(files, toptions);
 		ft_putstr(str);
 		ft_strdel(&str);
 		j = 0;
@@ -228,7 +314,7 @@ void	ft_display_c_(t_list *files, char *toptions)
 		while (j < tab_len)
 		{
 			str = ft_str_name(tab[j], toptions);
-			len = ft_strlen(str);
+			len = ft_len_name(tab[j], toptions);
 			ft_putstr(str);
 			ft_strdel(&str);
 			k = 0;
