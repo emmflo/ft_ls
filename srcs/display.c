@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/14 13:42:56 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/17 17:02:48 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,17 @@ char	*ft_str_name(t_list *files, char *toptions)
 	char		*str;
 	struct stat	*buff_stat;
 
-	str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
-	str[0] = '\0';
+	//str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
+	if (toptions[o_q])
+		str = ft_str_name_q(files);
+	else if (toptions[o_b] || toptions[o_B])
+		str = ft_str_name_b(files, toptions);
+	else
+	{
+		str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
+		ft_strcpy(str, ((t_file*)files->content)->dirent.d_name);
+	}
 	buff_stat = &((t_file*)files->content)->stat;
-	ft_strcat(str, ((t_file*)files->content)->dirent.d_name);
 	if (toptions[o_F])
 		ft_strcat(str, ft_f__str(buff_stat));
 	else if (toptions[o_p] && (buff_stat->st_mode & S_IFMT) == S_IFDIR)
@@ -134,7 +141,7 @@ int		ft_get_max_len(t_list *files, char *toptions)
 			ino_len = ft_nbrsize(((t_file*)files->content)->stat.st_ino) + 1;
 		else
 			ino_len = 0;
-		tmp = ft_strlen(((t_file*)files->content)->dirent.d_name) + ino_len;
+		tmp = ft_strlen(ft_str_name(files, toptions)) + ino_len;
 		max = tmp > max ? tmp : max;
 		files = files->next;
 	}
@@ -291,19 +298,34 @@ char	*ft_permission_to_str(t_file *file)
 	if ((buff_stat->st_mode & S_IWUSR) != 0)
 		permissions[1] = 'w';
 	if ((buff_stat->st_mode & S_IXUSR) != 0)
-		permissions[2] = 'x';
+		if ((buff_stat->st_mode & S_ISUID) != 0)
+			permissions[2] = 's';
+		else
+			permissions[2] = 'x';
+	else if ((buff_stat->st_mode & S_ISUID) != 0)
+		permissions[2] = 'S';
 	if ((buff_stat->st_mode & S_IRGRP) != 0)
 		permissions[3] = 'r';
 	if ((buff_stat->st_mode & S_IWGRP) != 0)
 		permissions[4] = 'w';
 	if ((buff_stat->st_mode & S_IXGRP) != 0)
-		permissions[5] = 'x';
+		if ((buff_stat->st_mode & S_ISGID) != 0)
+			permissions[5] = 's';
+		else
+			permissions[5] = 'x';
+	else if ((buff_stat->st_mode & S_ISGID) != 0)
+		permissions[5] = 'S';
 	if ((buff_stat->st_mode & S_IROTH) != 0)
 		permissions[6] = 'r';
 	if ((buff_stat->st_mode & S_IWOTH) != 0)
 		permissions[7] = 'w';
 	if ((buff_stat->st_mode & S_IXOTH) != 0)
-		permissions[8] = 'x';
+		if ((buff_stat->st_mode & S_ISVTX) != 0)
+			permissions[8] = 't';
+		else
+			permissions[8] = 'x';
+	else if ((buff_stat->st_mode & S_ISVTX) != 0)
+		permissions[8] = 'T';
 	if (file->xattrs != NULL)
 		permissions[9] = '@';
 	else if (file->acl != NULL)

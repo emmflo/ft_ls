@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/14 13:33:22 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/17 16:10:59 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,7 +322,6 @@ t_file	*ft_makefile(char *path, struct dirent *dirent)
 	struct stat	*stat;
 	t_file		*file;
 	char		*str;
-	t_list		*xattr;
 
 	if (!(stat = malloc(sizeof(struct stat))))
 		return NULL;

@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:28 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/14 13:14:00 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/17 17:04:01 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ void	ft_override_opt(char opt, char *toptions)
 		toptions[o_u] = 0;
 		toptions[o_U] = 0;
 	}
+	if (opt == 'v' || opt == 'w' || opt == 'B' || opt == 'b' || opt == 'q')
+	{
+		toptions[o_v] = 0;
+		toptions[o_w] = 0;
+		toptions[o_B] = 0;
+		toptions[o_b] = 0;
+		toptions[o_q] = 0;
+	}
 }
 
 char	*lsopt(char *options, char *toptions)
@@ -40,7 +48,7 @@ char	*lsopt(char *options, char *toptions)
 	char	*pos;
 	char	*valid_options;
 
-	valid_options = ft_strdup("lRartAxC1SFfgpmocuUTni@e");
+	valid_options = ft_strdup("lRartAxC1SFfgpmocuUTni@ebBqvw");
 	while (*options != '\0')
 	{
 		if ((pos = ft_strchr(valid_options, *options)) != NULL)

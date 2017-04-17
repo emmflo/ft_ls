@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/14 12:11:51 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/14 13:52:38 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/17 16:36:29 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	ft_get_acls(t_file *file)
 {
 	char	*path;
-	char	*acl_text;
 	acl_t	acl;
 
 	path = make_path(file->path, file->dirent.d_name);

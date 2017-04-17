@@ -13,7 +13,7 @@
 # include <stdio.h> //bite
 # include <sys/acl.h>
 # include <sys/types.h>
-# define NB_OPTIONS 24
+# define NB_OPTIONS 29
 //# define st_mtimespec st_mtim
 
 typedef struct		s_xattr
@@ -41,7 +41,7 @@ typedef struct		s_column_sizes
 
 enum			e_options { o_l, o_R, o_a, o_r, o_t , o_A, o_x, o_C, o_1, o_S,
    				o_F, o_f, o_g, o_p, o_m, o_o, o_c, o_u, o_U, o_T, o_n, o_i, o_at,
-				o_e };
+				o_e, o_b, o_B, o_q, o_v, o_w };
 t_list			*ft_merge(t_list *a, t_list *b, int cmp(void *, void *));
 t_list			*ft_merge_sort(t_list *list, int cmp(void *, void *));
 int				ft_lstlen(t_list *list);
@@ -61,5 +61,7 @@ void			ft_display_xattrs(t_file *file);
 void			ft_putnbr_fixed(int nb, int column_size, int right);
 void			ft_get_acls(t_file *file);
 void			ft_display_acls(t_file *file);
+char			*ft_str_name_b(t_list *files, char *toptions);
+char			*ft_str_name_q(t_list *files);
 
 #endif
