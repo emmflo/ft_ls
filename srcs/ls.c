@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/19 13:20:08 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 14:00:36 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,12 +308,12 @@ void	ft_dir(char *path, char *toptions)
 	errno = 0;
 	dir = opendir(path);
 	if (errno == ENOTDIR)
-		files = ft_lstnew(ft_makefile(path, NULL), sizeof(t_file));
+		files = ft_lstnew(ft_makefile(path, NULL, toptions), sizeof(t_file));
 	else if (ft_check_errno(path))
 		return ;
 	else
 	{
-		files = ft_makefilelist(path, dir);
+		files = ft_makefilelist(path, dir, toptions);
 		closedir(dir);
 	}
 	ft_filterlist(&files, toptions);
@@ -328,7 +328,7 @@ void	ft_list_d(t_list *dirs, char *toptions)
 {
 	t_list	*files;
 
-	files = ft_makefilelist_d(dirs);
+	files = ft_makefilelist_d(dirs, toptions);
 	ft_filterlist(&files, toptions);
 	files = ft_sortfiles(files, toptions);
 	ft_displayls(files, toptions);
@@ -345,9 +345,9 @@ struct dirent	*ft_makedirent(char *path)
 	return (dirent);
 }
 
-t_file	*ft_makefile(char *path, struct dirent *dirent)
+t_file	*ft_makefile(char *path, struct dirent *dirent, char *toptions)
 {
-	struct stat	*stat;
+	struct stat	*buff_stat;
 	t_file		*file;
 	char		*str;
 
@@ -356,25 +356,28 @@ t_file	*ft_makefile(char *path, struct dirent *dirent)
 		dirent = ft_makedirent(path);
 		path = "./";
 	}
-	if (!(stat = malloc(sizeof(struct stat))))
+	if (!(buff_stat = malloc(sizeof(struct stat))))
 		return (NULL);
 	str = make_path(path, dirent->d_name);
 	errno = 0;
-	lstat(str, stat);
+	if (toptions[o_H])
+		stat(str, buff_stat);
+	else
+		lstat(str, buff_stat);
 	if (ft_check_errno(dirent->d_name))
 		return (NULL);
 	free(str);
 	file = malloc(sizeof(*file));
 	file->path = ft_strdup(path);
 	file->dirent = *dirent;
-	file->stat = *stat;
+	file->stat = *buff_stat;
 	get_xattr_names(file);
 	ft_get_acls(file);
-	free(stat);
+	free(buff_stat);
 	return (file);
 }
 
-t_list	*ft_makefilelist(char *path, DIR *dir)
+t_list	*ft_makefilelist(char *path, DIR *dir, char *toptions)
 {
 	struct dirent	*dirent;
 	t_list			*files;
@@ -388,14 +391,14 @@ t_list	*ft_makefilelist(char *path, DIR *dir)
 		dirent = readdir(dir);
 		if (dirent == NULL)
 			break ;
-		if ((file = ft_makefile(path, dirent)) != NULL)
+		if ((file = ft_makefile(path, dirent, toptions)) != NULL)
 			ft_lstconstruct(&files, &ptr, ft_lstnew(file,
 			sizeof(t_file)));
 	}
 	return (files);
 }
 
-t_list	*ft_makefilelist_d(t_list *dirs)
+t_list	*ft_makefilelist_d(t_list *dirs, char *toptions)
 {
 	t_list			*files;
 	t_list			*ptr;
@@ -405,7 +408,7 @@ t_list	*ft_makefilelist_d(t_list *dirs)
 	ptr = NULL;
 	while (dirs != NULL)
 	{
-		if ((file = ft_makefile(dirs->content, NULL)) != NULL)
+		if ((file = ft_makefile(dirs->content, NULL, toptions)) != NULL)
 		{
 			ft_lstconstruct(&files, &ptr, ft_lstnew(file,
 			sizeof(t_file)));
