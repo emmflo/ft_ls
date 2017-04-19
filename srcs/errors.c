@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:02:02 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/19 19:22:12 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 20:18:15 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int		ft_check_errno(char *pre)
 
 void	ft_print_error(char *pre, char *error)
 {
-	ft_putstr("ls: ");
-	ft_putstr(pre);
-	ft_putstr(": ");
-	ft_putstr(error);
-	ft_putchar('\n');
+	ft_putstr_fd("ls: ", 2);
+	ft_putstr_fd(pre, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(error, 2);
+	ft_putchar_fd('\n', 2);
 }

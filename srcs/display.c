@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/19 20:07:57 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 20:46:26 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int		ft_len_name(t_list *files, char *toptions)
 		len = ft_strlen(((t_file*)files->content)->dirent.d_name);
 	if (toptions[o_F])
 		len++;
+	if (toptions[o_i])
+		len += ft_nbrsize(((t_file*)files->content)->stat.st_ino) + 1;
 	return (len);
 }
 
@@ -218,16 +220,11 @@ int		ft_get_max_len(t_list *files, char *toptions)
 {
 	int		max;
 	int		tmp;
-	int		ino_len;
 
 	max = 0;
 	while (files != NULL)
 	{
-		if (toptions[o_i])
-			ino_len = ft_nbrsize(((t_file*)files->content)->stat.st_ino) + 1;
-		else
-			ino_len = 0;
-		tmp = ft_len_name(files, toptions) + ino_len;
+		tmp = ft_len_name(files, toptions);
 		max = tmp > max ? tmp : max;
 		files = files->next;
 	}
@@ -313,6 +310,8 @@ void	ft_display_c_(t_list *files, char *toptions)
 		j = i;
 		while (j < tab_len)
 		{
+			if (toptions[o_i])
+				ft_putino(tab[j]);
 			str = ft_str_name(tab[j], toptions);
 			len = ft_len_name(tab[j], toptions);
 			ft_putstr(str);
