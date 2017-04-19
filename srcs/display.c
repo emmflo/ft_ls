@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/19 13:33:07 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 20:07:57 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -504,6 +504,11 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs, char *toptions)
 			ft_putstr_fixed(getgrgid(buff_stat->st_gid)->gr_name, cs->group, 0);
 		ft_putstr("  ");
 	}
+	if (buff_stat->st_flags != 0)
+		ft_putstr_fixed(fflagstostr(buff_stat->st_flags), cs->flags, 1);
+	else
+		ft_putstr_fixed("-", cs->flags, 1);
+	ft_putstr(" ");
 	ft_putnbr_fixed(buff_stat->st_size, cs->size, 1);
 	ft_putstr(" ");
 	print_date(buff_stat, toptions);
@@ -588,6 +593,7 @@ t_column_sizes	*ft_new_column_sizes(void)
 	column_sizes->size = 0;
 	column_sizes->user = 0;
 	column_sizes->group = 0;
+	column_sizes->flags = 1;
 	return (column_sizes);
 }
 
@@ -615,6 +621,9 @@ t_column_sizes	*ft_get_column_size(t_list *files, char *toptions)
 			tmp = ft_strlen(getgrgid(((t_file*)files->content)
 						->stat.st_gid)->gr_name);
 		cs->group = cs->group < tmp ? tmp : cs->group;
+		if (toptions[o_O])
+			tmp = ft_strlen(fflagstostr(((t_file*)files->content)->stat.st_flags));
+		cs->flags = cs->flags < tmp ? tmp : cs->flags;
 		files = files->next;
 	}
 	return (cs);
