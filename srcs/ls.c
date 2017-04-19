@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/17 18:59:09 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 13:20:08 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,9 @@ int		ft_filter_errno(t_list *elem)
 
 	errno = 0;
 	dir = opendir(((char*)elem->content));
-	if (ft_check_errno(((char*)elem->content)))
+	if (errno == ENOTDIR)
+		ret = 0;
+	else if (ft_check_errno(((char*)elem->content)))
 		ret = 0;
 	else
 	{
@@ -305,16 +307,42 @@ void	ft_dir(char *path, char *toptions)
 
 	errno = 0;
 	dir = opendir(path);
-	if (ft_check_errno(path))
+	if (errno == ENOTDIR)
+		files = ft_lstnew(ft_makefile(path, NULL), sizeof(t_file));
+	else if (ft_check_errno(path))
 		return ;
-	files = ft_makefilelist(path, dir);
+	else
+	{
+		files = ft_makefilelist(path, dir);
+		closedir(dir);
+	}
 	ft_filterlist(&files, toptions);
 	files = ft_sortfiles(files, toptions);
 	ft_displayls(files, toptions);
 	if (toptions[o_R])
 		ft_recursive(files, toptions);
 	ft_lstdel(&files, &ft_delfile);
-	closedir(dir);
+}
+
+void	ft_list_d(t_list *dirs, char *toptions)
+{
+	t_list	*files;
+
+	files = ft_makefilelist_d(dirs);
+	ft_filterlist(&files, toptions);
+	files = ft_sortfiles(files, toptions);
+	ft_displayls(files, toptions);
+	ft_lstdel(&files, &ft_delfile);
+}
+
+struct dirent	*ft_makedirent(char *path)
+{
+	struct dirent	*dirent;
+
+	if (!(dirent = malloc(sizeof(struct dirent))))
+		return (NULL);
+	ft_strcpy(dirent->d_name, path);
+	return (dirent);
 }
 
 t_file	*ft_makefile(char *path, struct dirent *dirent)
@@ -323,8 +351,13 @@ t_file	*ft_makefile(char *path, struct dirent *dirent)
 	t_file		*file;
 	char		*str;
 
+	if (dirent == NULL)
+	{
+		dirent = ft_makedirent(path);
+		path = "./";
+	}
 	if (!(stat = malloc(sizeof(struct stat))))
-		return NULL;
+		return (NULL);
 	str = make_path(path, dirent->d_name);
 	errno = 0;
 	lstat(str, stat);
@@ -332,8 +365,8 @@ t_file	*ft_makefile(char *path, struct dirent *dirent)
 		return (NULL);
 	free(str);
 	file = malloc(sizeof(*file));
-	file->dirent = *dirent;
 	file->path = ft_strdup(path);
+	file->dirent = *dirent;
 	file->stat = *stat;
 	get_xattr_names(file);
 	ft_get_acls(file);
@@ -362,6 +395,26 @@ t_list	*ft_makefilelist(char *path, DIR *dir)
 	return (files);
 }
 
+t_list	*ft_makefilelist_d(t_list *dirs)
+{
+	t_list			*files;
+	t_list			*ptr;
+	t_file			*file;
+
+	files = NULL;
+	ptr = NULL;
+	while (dirs != NULL)
+	{
+		if ((file = ft_makefile(dirs->content, NULL)) != NULL)
+		{
+			ft_lstconstruct(&files, &ptr, ft_lstnew(file,
+			sizeof(t_file)));
+		}
+		dirs = dirs->next;
+	}
+	return (files);
+}
+
 void	ft_deldir(void *str, size_t size)
 {
 	str = NULL;
@@ -380,33 +433,63 @@ char	*ft_newtoptions(void)
 	return (toptions);
 }
 
+void	ft_files(t_list *dirs, char *toptions)
+{
+	int			temp;
+	struct stat	stat;
+	t_list		*files;
+	t_list		*ptr;
+
+	files = NULL;
+	ptr = NULL;
+	while (dirs != NULL)
+	{
+		lstat(dirs->content, &stat);
+		if ((stat.st_mode & S_IFMT) != S_IFDIR)
+		{
+			ft_lstconstruct(&files, &ptr, ft_lstnew(dirs->content, sizeof(dirs->content)));
+		}
+		dirs = dirs->next;
+	}
+	temp = toptions[o_d];
+	toptions[o_d] = 1;
+	ft_list_d(files, toptions);
+	toptions[o_d] = temp;
+	if (files != NULL)
+		ft_putchar('\n');
+}
+
 void	ft_ls(char *options, t_list *dirs)
 {
 	char	*toptions;
-	t_list	*first;
+	t_list	*ptr;
 
-	first = dirs;
 	toptions = ft_newtoptions();
 	ft_get_prefs(toptions);
 	lsopt(options, toptions);
 	ft_strdel(&options);
-	if (dirs == NULL)
+	if (toptions[o_d])
+		ft_list_d(dirs, toptions);
+	else if (dirs == NULL)
 		ft_dir("./", toptions);
 	else if (dirs->next == NULL)
 		ft_dir(dirs->content, toptions);
 	else
 	{
-		ft_lstinplacefilter(&dirs, &ft_filter_errno, &ft_deldir);
-		while (dirs != NULL)
+		ptr = ft_lstfilter(dirs, &ft_filter_errno);
+		ft_files(dirs, toptions);
+		while (ptr != NULL)
 		{
-			ft_putstr(dirs->content);
+			ft_putstr(ptr->content);
 			ft_putstr(":\n");
-			ft_dir(dirs->content, toptions);
-			dirs = dirs->next;
-			if (dirs != NULL)
+			ft_dir(ptr->content, toptions);
+			ptr = ptr->next;
+			if (ptr != NULL)
 				ft_putchar('\n');
 		}
+		if (ptr != NULL)
+			ft_lstdel(&ptr, &ft_deldir);
 	}
-	ft_lstdel(&first, &ft_deldir);
+	ft_lstdel(&dirs, &ft_deldir);
 	ft_strdel(&toptions);
 }

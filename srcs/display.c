@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/17 20:51:05 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 11:39:33 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -542,10 +542,13 @@ void	ft_display_l(t_list *files, char *toptions)
 	long long int	total;
 
 	column_sizes = ft_get_column_size(files, toptions);
-	total = ft_get_total(files);
-	ft_putstr("total ");
-	ft_putnbr(total);
-	ft_putchar('\n');
+	if (!toptions[o_d])
+	{
+		total = ft_get_total(files);
+		ft_putstr("total ");
+		ft_putnbr(total);
+		ft_putchar('\n');
+	}
 	while (files != NULL)
 	{
 		ft_display_l_file(files, column_sizes, toptions);
