@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/19 20:46:26 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 20:49:03 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -503,10 +503,13 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs, char *toptions)
 			ft_putstr_fixed(getgrgid(buff_stat->st_gid)->gr_name, cs->group, 0);
 		ft_putstr("  ");
 	}
-	if (buff_stat->st_flags != 0)
-		ft_putstr_fixed(fflagstostr(buff_stat->st_flags), cs->flags, 1);
-	else
-		ft_putstr_fixed("-", cs->flags, 1);
+	if (toptions[o_O])
+	{
+		if (buff_stat->st_flags != 0)
+			ft_putstr_fixed(fflagstostr(buff_stat->st_flags), cs->flags, 1);
+		else
+			ft_putstr_fixed("-", cs->flags, 1);
+	}
 	ft_putstr(" ");
 	ft_putnbr_fixed(buff_stat->st_size, cs->size, 1);
 	ft_putstr(" ");
