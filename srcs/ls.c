@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/19 14:00:36 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 14:06:38 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,7 +360,7 @@ t_file	*ft_makefile(char *path, struct dirent *dirent, char *toptions)
 		return (NULL);
 	str = make_path(path, dirent->d_name);
 	errno = 0;
-	if (toptions[o_H])
+	if (toptions[o_L])
 		stat(str, buff_stat);
 	else
 		lstat(str, buff_stat);
