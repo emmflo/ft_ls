@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/19 14:06:38 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 19:26:03 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,15 +277,43 @@ void	ft_filterlist(t_list **files, char *toptions)
 		ft_lstinplacefilter(files, &ft_filter_dot, &ft_delfile);
 }
 
-void	ft_recursive(t_list *files, char *toptions)
+void	ft_delino(void *ino, size_t size)
 {
-	char	*str;
-	char	*name;
+	size = 0;
+	free(ino);
+}
 
+int		ft_inoinlst(t_list *visited, ino_t ino)
+{
+	while (visited != NULL)
+	{
+		if (*((ino_t*)visited->content) == ino)
+			return (1);
+		visited = visited->next;
+	}
+	return (0);
+}
+
+void	ft_recursive(t_list *files, char *toptions, char *path)
+{
+	static t_list	*visited = NULL;
+	static t_list	*ptr = NULL;
+	struct stat		buff_stat;
+	char			*str;
+	char			*name;
+	ino_t			*tmp;
+
+	stat(path, &buff_stat);
+	if (!(tmp = malloc(sizeof(ino_t))))
+		return ;
+	*tmp = buff_stat.st_ino;
+	ft_lstconstruct(&visited, &ptr, ft_lstnew(tmp, sizeof(ino_t)));
 	while (files != NULL)
 	{
 		name = ((t_file*)files->content)->dirent.d_name;
-		if ((((t_file*)files->content)->stat.st_mode & S_IFMT) == S_IFDIR &&
+		if (ft_inoinlst(visited, ((t_file*)files->content)->stat.st_ino))
+			ft_print_error(name, "directory causes a cycle");
+		else if ((((t_file*)files->content)->stat.st_mode & S_IFMT) == S_IFDIR &&
 				ft_strcmp(name, ".") != 0 &&
 				ft_strcmp(name, "..") != 0)
 		{
@@ -298,6 +326,7 @@ void	ft_recursive(t_list *files, char *toptions)
 		}
 		files = files->next;
 	}
+	ft_lstdel(&ptr, &ft_delino);
 }
 
 void	ft_dir(char *path, char *toptions)
@@ -320,7 +349,7 @@ void	ft_dir(char *path, char *toptions)
 	files = ft_sortfiles(files, toptions);
 	ft_displayls(files, toptions);
 	if (toptions[o_R])
-		ft_recursive(files, toptions);
+		ft_recursive(files, toptions, path);
 	ft_lstdel(&files, &ft_delfile);
 }
 

@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:02:02 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/10 19:03:32 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 19:22:12 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,17 @@ int		ft_check_errno(char *pre)
 {
 	if (errno != 0)
 	{
-		ft_putstr("ls: ");
-		ft_putstr(pre);
-		ft_putstr(": ");
-		ft_putstr(strerror(errno));
-		ft_putchar('\n');
+		ft_print_error(pre, strerror(errno));
 		return (-1);
 	}
 	return (0);
+}
+
+void	ft_print_error(char *pre, char *error)
+{
+	ft_putstr("ls: ");
+	ft_putstr(pre);
+	ft_putstr(": ");
+	ft_putstr(error);
+	ft_putchar('\n');
 }

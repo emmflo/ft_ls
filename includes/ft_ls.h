@@ -65,5 +65,6 @@ char			*ft_str_name_b(t_list *files, char *toptions);
 char			*ft_str_name_q(t_list *files);
 t_list			*ft_makefilelist_d(t_list *dirs, char *toptions);
 t_file			*ft_makefile(char *path, struct dirent *dirent, char *toptions);
+void			ft_print_error(char *pre, char *error);
 
 #endif

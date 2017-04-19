@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:37 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/17 20:26:41 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/19 19:26:27 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	ft_get_prefs(char *toptions)
 
 	ioctl(0, TIOCGWINSZ, &w);
 	g_columns = w.ws_col;
+	if (g_columns <= 0)
+		g_columns = 80;
 	if (isatty(1))
 	{
 		toptions[o_q] = 1;
