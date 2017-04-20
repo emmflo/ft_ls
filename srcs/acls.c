@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/14 12:11:51 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/17 16:36:29 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/20 11:04:52 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,28 @@ void	ft_get_acls(t_file *file)
 	file->acl = acl_dup(acl);
 }
 
+void	ft_display_acl(char *acl_line)
+{
+	char	**acl_fields;
+
+	acl_fields = ft_strsplit(acl_line, ':');
+	ft_putstr(": ");
+	ft_putstr(acl_fields[0]);
+	ft_putchar(':');
+	ft_putstr(acl_fields[2]);
+	ft_putchar(' ');
+	ft_putstr(acl_fields[4]);
+	ft_putchar(' ');
+	ft_putstr(acl_fields[5]);
+	ft_putchar('\n');
+}
+
 void	ft_display_acls(t_file *file)
 {
 	ssize_t	len;
 	int		i;
 	char	*acl_text;
 	char	**acl_lines;
-	char	**acl_fields;
 
 	if (file->acl == NULL)
 		return ;
@@ -37,18 +52,8 @@ void	ft_display_acls(t_file *file)
 	i = 1;
 	while (acl_lines[i] != NULL)
 	{
-		acl_fields = ft_strsplit(acl_lines[i], ':');
 		ft_putnbr_fixed(i - 1, 2, 1);
-		ft_putstr(": ");
-		ft_putstr(acl_fields[0]);
-		ft_putchar(':');
-		ft_putstr(acl_fields[2]);
-		ft_putchar(' ');
-		ft_putstr(acl_fields[4]);
-		ft_putchar(' ');
-		ft_putstr(acl_fields[5]);
-		ft_putchar('\n');
+		ft_display_acl(acl_lines[i]);
 		i++;
 	}
-	//ft_putstr(acl_text);
 }

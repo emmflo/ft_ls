@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 18:19:23 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/13 12:08:01 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/20 12:37:06 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_realloc(char *str, int size)
 	new = ft_strnew(size);
 	ft_strcpy(new, str);
 	free(str);
-	return (str);
+	return (new);
 }
 
 char	*get_options(int argc, char *argv[], int *i)

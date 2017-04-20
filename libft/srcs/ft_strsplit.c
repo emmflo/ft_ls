@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 23:29:26 by eflorenz          #+#    #+#             */
-/*   Updated: 2016/11/08 18:20:04 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/20 12:14:27 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static int	count_words(char const *s, char c)
 {
 	int	i;
-	int	start;
 	int	count;
 
 	i = 0;
@@ -24,7 +23,6 @@ static int	count_words(char const *s, char c)
 	{
 		if (s[i] != c)
 		{
-			start = i;
 			while (s[i] != c && s[i] != '\0')
 				i++;
 			i--;

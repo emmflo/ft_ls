@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:02:02 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/19 20:18:15 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/20 11:59:46 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,15 @@ int		ft_check_errno(char *pre)
 {
 	if (errno != 0)
 	{
-		ft_print_error(pre, strerror(errno));
+		ft_print_errno(pre);
 		return (-1);
 	}
 	return (0);
+}
+
+void	ft_print_errno(char *pre)
+{
+	ft_print_error(pre, strerror(errno));
 }
 
 void	ft_print_error(char *pre, char *error)

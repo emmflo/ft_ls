@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 11:28:13 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/14 12:08:01 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/20 11:53:42 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	get_xattr_names(t_file *file)
 			return ;
 		attr->name = ft_strdup(&attr_names[i]);
 		attr->size = getxattr(path, attr->name, NULL, 0, 0, 0);
-		//printf("%zd\n", attr->size);
 		if (!(attr->attr = malloc(attr->size)))
 			return ;
 		getxattr(path, attr->name, attr->attr, attr->size, 0, 0);

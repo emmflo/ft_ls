@@ -6,60 +6,62 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:28 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/19 20:06:09 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/20 16:20:00 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include <stdio.h>
 
-void	ft_override_opt(char opt, char *toptions)
+char	*g_toptions;
+
+void	ft_override_opt(char opt)
 {
 	if (opt == '1' || opt == 'C' || opt == 'x' || opt == 'l' || opt == 'm')
 	{
-		toptions[o_1] = 0;
-		toptions[o_C] = 0;
-		toptions[o_x] = 0;
-		toptions[o_l] = 0;
-		toptions[o_m] = 0;
+		g_toptions[o_1] = 0;
+		g_toptions[o_C] = 0;
+		g_toptions[o_x] = 0;
+		g_toptions[o_l] = 0;
+		g_toptions[o_m] = 0;
 	}
 	if (opt == 'f')
-		toptions[o_a] = 1;
+		g_toptions[o_a] = 1;
 	if (opt == 'g' || opt == 'o')
-		toptions[o_l] = 1;
+		g_toptions[o_l] = 1;
 	if (opt == 'c' || opt == 'u' || opt == 'U')
 	{
-		toptions[o_c] = 0;
-		toptions[o_u] = 0;
-		toptions[o_U] = 0;
+		g_toptions[o_c] = 0;
+		g_toptions[o_u] = 0;
+		g_toptions[o_U] = 0;
 	}
 	if (opt == 'v' || opt == 'w' || opt == 'B' || opt == 'b' || opt == 'q')
 	{
-		toptions[o_v] = 0;
-		toptions[o_w] = 0;
-		toptions[o_B] = 0;
-		toptions[o_b] = 0;
-		toptions[o_q] = 0;
+		g_toptions[o_v] = 0;
+		g_toptions[o_w] = 0;
+		g_toptions[o_B] = 0;
+		g_toptions[o_b] = 0;
+		g_toptions[o_q] = 0;
 	}
 }
 
-char	*lsopt(char *options, char *toptions)
+char	*lsopt(char *options)
 {
 	char	*pos;
 	char	*valid_options;
 
-	valid_options = ft_strdup("lRartAxC1SFfgpmocuUTni@ebBqvwGdLHPO");
+	valid_options = ft_strdup("lRartAxC1SFfgpmocuUTni@ebBqvwGdLHPOs");
 	while (*options != '\0')
 	{
 		if ((pos = ft_strchr(valid_options, *options)) != NULL)
 		{
-			ft_override_opt(*pos, toptions);
-			toptions[pos - valid_options] = 1;
+			ft_override_opt(*pos);
+			g_toptions[pos - valid_options] = 1;
 		}
 		else
 			opt_error(*options);
 		options++;
 	}
 	ft_strdel(&valid_options);
-	return (toptions);
+	return (g_toptions);
 }

@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/20 10:55:59 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/04/20 16:20:32 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 extern int	g_columns;
 extern char	*g_colors;
 extern char	g_colors_tab[][6];
-extern char	*lscolors;
+extern char	*g_lscolors;
 
 char	*ft_itoa(int nb)
 {
@@ -72,19 +72,19 @@ char	*ft_f__str(struct stat *buff_stat)
 		return ("");
 }
 
-int		ft_len_name(t_list *files, char *toptions)
+int		ft_len_name(t_list *files)
 {
 	int		len;
 
-	if (toptions[o_q])
+	if (g_toptions[o_q])
 		len = ft_strlen(ft_str_name_q(files));
-	else if (toptions[o_b] || toptions[o_B])
-		len = ft_strlen(ft_str_name_b(files, toptions));
+	else if (g_toptions[o_b] || g_toptions[o_B])
+		len = ft_strlen(ft_str_name_b(files));
 	else
 		len = ft_strlen(((t_file*)files->content)->dirent.d_name);
-	if (toptions[o_F])
+	if (g_toptions[o_F])
 		len++;
-	if (toptions[o_i])
+	if (g_toptions[o_i])
 		len += ft_nbrsize(((t_file*)files->content)->stat.st_ino) + 1;
 	return (len);
 }
@@ -92,6 +92,7 @@ int		ft_len_name(t_list *files, char *toptions)
 int		ft_color_index(char c)
 {
 	char	*addr;
+
 	if ((addr = ft_strchr(g_colors, c)) != NULL)
 		return (addr - g_colors);
 	else
@@ -103,14 +104,14 @@ char	*ft_make_color_str(int index)
 	char	*str;
 
 	str = ft_strnew(10);
-	ft_strcat(str, g_colors_tab[ft_color_index(lscolors[index * 2])]);
-	ft_strcat(str, g_colors_tab[ft_color_index(ft_toupper(lscolors[index * 2 + 1]))]);
+	ft_strcat(str, g_colors_tab[ft_color_index(g_lscolors[index * 2])]);
+	ft_strcat(str, g_colors_tab[ft_color_index(ft_toupper(
+					g_lscolors[index * 2 + 1]))]);
 	return (str);
 }
 
 char	*ft_get_color(struct stat *buff_stat)
 {
-
 	if ((buff_stat->st_mode & S_IFMT) == S_IFDIR)
 	{
 		if ((buff_stat->st_mode & S_IWOTH) != 0)
@@ -147,67 +148,91 @@ char	*ft_get_color(struct stat *buff_stat)
 		return (ft_strdup("\x1b[39m\x1b[49m"));
 }
 
-char	*ft_str_name(t_list *files, char *toptions)
+void	ft_color_name_start(char *str, struct stat *buff_stat)
+{
+	char	*tmp;
+
+	if (g_toptions[o_G])
+	{
+		tmp = ft_get_color(buff_stat);
+		ft_strcat(str, tmp);
+		ft_strdel(&tmp);
+	}
+}
+
+char	*ft_str_name_(t_list *files)
+{
+	char	*name;
+
+	name = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
+	ft_strcpy(name, ((t_file*)files->content)->dirent.d_name);
+	return (name);
+}
+
+void	ft_color_name_end(char *str)
+{
+	if (g_toptions[o_G])
+	{
+		ft_strcat(str, g_colors_tab[ft_color_index('x')]);
+		ft_strcat(str, g_colors_tab[ft_color_index('X')]);
+	}
+}
+
+char	*ft_str_name(t_list *files)
 {
 	char		*str;
 	char		*name;
 	struct stat	*buff_stat;
 
 	buff_stat = &((t_file*)files->content)->stat;
-	str = ft_strnew(ft_len_name(files, toptions) + toptions[o_F] + 20 * toptions[o_G]);
+	str = ft_strnew(ft_len_name(files)
+			+ g_toptions[o_F] + 20 * g_toptions[o_G]);
 	str[0] = '\0';
-	if (toptions[o_G])
-		ft_strcat(str, ft_get_color(buff_stat));
-	if (toptions[o_q])
+	ft_color_name_start(str, buff_stat);
+	if (g_toptions[o_q])
 		name = ft_str_name_q(files);
-	else if (toptions[o_b] || toptions[o_B])
-		name = ft_str_name_b(files, toptions);
+	else if (g_toptions[o_b] || g_toptions[o_B])
+		name = ft_str_name_b(files);
 	else
-	{
-		name = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
-		ft_strcpy(name, ((t_file*)files->content)->dirent.d_name);
-	}
+		name = ft_str_name_(files);
 	ft_strcat(str, name);
-	if (toptions[o_G])
-	{
-		ft_strcat(str, g_colors_tab[ft_color_index('x')]);
-		ft_strcat(str, g_colors_tab[ft_color_index('X')]);
-	}
-	if (toptions[o_F])
+	free(name);
+	ft_color_name_end(str);
+	if (g_toptions[o_F])
 		ft_strcat(str, ft_f__str(buff_stat));
-	else if (toptions[o_p] && (buff_stat->st_mode & S_IFMT) == S_IFDIR)
+	else if (g_toptions[o_p] && (buff_stat->st_mode & S_IFMT) == S_IFDIR)
 		ft_strcat(str, "/");
 	return (str);
 }
 
-void	ft_display_name(t_list *files, char *toptions)
+void	ft_display_name(t_list *files)
 {
 	char	*str;
 
-	str = ft_str_name(files, toptions);
+	str = ft_str_name(files);
 	ft_putstr(str);
 	ft_strdel(&str);
 }
 
-void	ft_display_1(t_list *files, char *toptions)
+void	ft_display_1(t_list *files)
 {
 	while (files != NULL)
 	{
-		if (toptions[o_i])
+		if (g_toptions[o_i])
 			ft_putino(files);
-		ft_display_name(files, toptions);
+		ft_display_name(files);
 		ft_putchar('\n');
 		files = files->next;
 	}
 }
 
-void	ft_display_m(t_list *files, char *toptions)
+void	ft_display_m(t_list *files)
 {
 	while (files != NULL)
 	{
-		if (toptions[o_i])
+		if (g_toptions[o_i])
 			ft_putino(files);
-		ft_display_name(files, toptions);
+		ft_display_name(files);
 		files = files->next;
 		if (files != NULL)
 			ft_putstr(", ");
@@ -216,7 +241,7 @@ void	ft_display_m(t_list *files, char *toptions)
 	}
 }
 
-int		ft_get_max_len(t_list *files, char *toptions)
+int		ft_get_max_len(t_list *files)
 {
 	int		max;
 	int		tmp;
@@ -224,39 +249,45 @@ int		ft_get_max_len(t_list *files, char *toptions)
 	max = 0;
 	while (files != NULL)
 	{
-		tmp = ft_len_name(files, toptions);
+		tmp = ft_len_name(files);
 		max = tmp > max ? tmp : max;
 		files = files->next;
 	}
 	return (max);
 }
 
-void	ft_display_x(t_list *files, char *toptions)
+void	ft_putnchar(char c, int nb)
+{
+	int	i;
+
+	i = 0;
+	while (i++ < nb)
+		ft_putchar(c);
+}
+
+void	ft_display_x(t_list *files)
 {
 	int		max;
 	int		nb_columns;
 	int		i;
-	int		j;
 	int		len;
 	char	*str;
 
-	max = ft_get_max_len(files, toptions);
+	max = ft_get_max_len(files);
 	max = max + (8 - max % 8);
 	nb_columns = g_columns / max;
 	i = 0;
 	while (files != NULL)
 	{
-		if (toptions[o_i])
+		if (g_toptions[o_i])
 			ft_putino(files);
-		str = ft_str_name(files, toptions);
-		len = ft_len_name(files, toptions);
+		str = ft_str_name(files);
+		len = ft_len_name(files);
 		ft_putstr(str);
 		ft_strdel(&str);
-		j = 0;
 		if (len % 8 != 0)
 			ft_putchar('\t');
-		while (j++ < (max - len) / 8)
-			ft_putchar('\t');
+		ft_putnchar('\t', (max - len) / 8);
 		if (i++ % nb_columns == nb_columns - 1)
 			ft_putchar('\n');
 		files = files->next;
@@ -272,7 +303,7 @@ t_list	**ft_make_file_tab(t_list *files)
 	int		i;
 
 	len = ft_lstlen(files);
-	if (!(tab = malloc(sizeof(t_list) * len)))
+	if (!(tab = malloc(sizeof(t_list*) * len)))
 		exit(1);
 	i = 0;
 	while (files != NULL)
@@ -284,49 +315,56 @@ t_list	**ft_make_file_tab(t_list *files)
 	return (tab);
 }
 
-void	ft_display_c_(t_list *files, char *toptions)
+int		ft_get_nb_lines_c_(int max, int tab_len)
 {
-	t_list	**tab;
-	int		max;
 	int		nb_columns;
 	int		nb_lines;
-	int		i;
-	int		j;
-	int		k;
-	int		len;
-	int		tab_len;
-	char	*str;
 
-	tab = ft_make_file_tab(files);
-	tab_len = ft_lstlen(files);
-	max = ft_get_max_len(files, toptions);
-	max = max + (8 - max % 8);
 	nb_columns = g_columns / max;
-	nb_lines = tab_len / nb_columns;
-	nb_lines += tab_len % nb_columns == 0 ? 0 : 1;
+	nb_lines = tab_len / nb_columns + (tab_len % nb_columns != 0);
+	return (nb_lines);
+}
+
+void	ft_print_c_(int j, t_tab *tab, int nb_lines, int max)
+{
+	char	*str;
+	int		len;
+
+	while (j < tab->tab_len)
+	{
+		if (g_toptions[o_i])
+			ft_putino(tab->tab[j]);
+		str = ft_str_name(tab->tab[j]);
+		len = ft_len_name(tab->tab[j]);
+		ft_putstr(str);
+		ft_strdel(&str);
+		if (len % 8 != 0)
+			ft_putchar('\t');
+		ft_putnchar('\t', (max - len) / 8);
+		j += nb_lines;
+	}
+}
+
+void	ft_display_c_(t_list *files)
+{
+	t_tab	tab;
+	int		max;
+	int		i;
+	int		nb_lines;
+
+	tab.tab = (void**)ft_make_file_tab(files);
+	tab.tab_len = ft_lstlen(files);
+	max = ft_get_max_len(files);
+	max = max + (8 - max % 8);
+	nb_lines = ft_get_nb_lines_c_(max, tab.tab_len);
 	i = 0;
 	while (i < nb_lines)
 	{
-		j = i;
-		while (j < tab_len)
-		{
-			if (toptions[o_i])
-				ft_putino(tab[j]);
-			str = ft_str_name(tab[j], toptions);
-			len = ft_len_name(tab[j], toptions);
-			ft_putstr(str);
-			ft_strdel(&str);
-			k = 0;
-			if (len % 8 != 0)
-				ft_putchar('\t');
-			while (k++ < (max - len) / 8)
-				ft_putchar('\t');
-			j += nb_lines;
-		}
+		ft_print_c_(i, &tab, nb_lines, max);
 		i++;
 		ft_putchar('\n');
 	}
-	free(tab);
+	free(tab.tab);
 }
 
 void	ft_putnbr_fixed(int nb, int column_size, int right)
@@ -454,17 +492,17 @@ char	*link_to_str(char *path, struct stat *buff_stat)
 	return (str);
 }
 
-void	print_date(struct stat *buff_stat, char *toptions)
+void	print_date(struct stat *buff_stat)
 {
 	char			*str;
 
-	if (toptions[o_c])
+	if (g_toptions[o_c])
 		str = ctime(&(buff_stat->st_ctimespec.tv_sec));
-	else if (toptions[o_u])
+	else if (g_toptions[o_u])
 		str = ctime(&(buff_stat->st_atimespec.tv_sec));
 	else
 		str = ctime(&(buff_stat->st_mtimespec.tv_sec));
-	if (toptions[o_T])
+	if (g_toptions[o_T])
 		str[ft_strlen(str) - 1] = '\0';
 	else
 		str[ft_strlen(str) - 9] = '\0';
@@ -472,7 +510,7 @@ void	print_date(struct stat *buff_stat, char *toptions)
 	ft_putchar(' ');
 }
 
-void	ft_display_l_file(t_list *file, t_column_sizes *cs, char *toptions)
+void	ft_display_l_file(t_list *file, t_column_sizes *cs)
 {
 	t_file		*file_content;
 	struct stat	*buff_stat;
@@ -480,30 +518,30 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs, char *toptions)
 
 	file_content = ((t_file*)file->content);
 	buff_stat = &file_content->stat;
-	if (toptions[o_i])
+	if (g_toptions[o_i])
 		ft_putino(file);
 	ft_putchar(ft_type_to_char(buff_stat));
 	ft_putstr(ft_permission_to_str(file_content));
 	ft_putstr(" ");
 	ft_putnbr_fixed(buff_stat->st_nlink, cs->nlink, 1);
 	ft_putstr(" ");
-	if (!toptions[o_g])
+	if (!g_toptions[o_g])
 	{
-		if (toptions[o_n])
+		if (g_toptions[o_n])
 			ft_putnbr_fixed(buff_stat->st_uid, cs->user, 0);
 		else
 			ft_putstr_fixed(getpwuid(buff_stat->st_uid)->pw_name, cs->user, 0);
 		ft_putstr("  ");
 	}
-	if (!toptions[o_o])
+	if (!g_toptions[o_o])
 	{
-		if (toptions[o_n])
+		if (g_toptions[o_n])
 			ft_putnbr_fixed(buff_stat->st_gid, cs->group, 0);
 		else
 			ft_putstr_fixed(getgrgid(buff_stat->st_gid)->gr_name, cs->group, 0);
 		ft_putstr("  ");
 	}
-	if (toptions[o_O])
+	if (g_toptions[o_O])
 	{
 		if (buff_stat->st_flags != 0)
 			ft_putstr_fixed(fflagstostr(buff_stat->st_flags), cs->flags, 1);
@@ -513,8 +551,8 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs, char *toptions)
 	}
 	ft_putnbr_fixed(buff_stat->st_size, cs->size, 1);
 	ft_putstr(" ");
-	print_date(buff_stat, toptions);
-	ft_display_name(file, toptions);
+	print_date(buff_stat);
+	ft_display_name(file);
 	if (ft_type_to_char(buff_stat) == 'l')
 	{
 		ft_putstr(" -> ");
@@ -523,10 +561,15 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs, char *toptions)
 		free(str);
 	}
 	ft_putchar('\n');
-	if (toptions[o_at])
+	if (g_toptions[o_at])
 		ft_display_xattrs(file_content);
-	if (toptions[o_e])
+	if (g_toptions[o_e])
 		ft_display_acls(file_content);
+}
+
+long long int	ft_get_size(t_file *file)
+{
+	return (file->stat.st_blocks * file->stat.st_blksize / 4096);
 }
 
 long long int	ft_get_total(t_list *files)
@@ -536,20 +579,19 @@ long long int	ft_get_total(t_list *files)
 	total = 0;
 	while (files != NULL)
 	{
-		total += ((t_file*)files->content)->stat.st_blocks
-			* (((t_file*)files->content)->stat.st_blksize / 4096);
+		total += ft_get_size(((t_file*)files->content));
 		files = files->next;
 	}
 	return (total);
 }
 
-void	ft_display_l(t_list *files, char *toptions)
+void	ft_display_l(t_list *files)
 {
 	t_column_sizes	*column_sizes;
 	long long int	total;
 
-	column_sizes = ft_get_column_size(files, toptions);
-	if (!toptions[o_d] && files != NULL && files->next != NULL)
+	column_sizes = ft_get_column_size(files);
+	if (!g_toptions[o_d] && files != NULL && files->next != NULL)
 	{
 		total = ft_get_total(files);
 		ft_putstr("total ");
@@ -558,7 +600,7 @@ void	ft_display_l(t_list *files, char *toptions)
 	}
 	while (files != NULL)
 	{
-		ft_display_l_file(files, column_sizes, toptions);
+		ft_display_l_file(files, column_sizes);
 		files = files->next;
 	}
 }
@@ -596,51 +638,100 @@ t_column_sizes	*ft_new_column_sizes(void)
 	column_sizes->user = 0;
 	column_sizes->group = 0;
 	column_sizes->flags = 1;
+	column_sizes->s = 0;
 	return (column_sizes);
 }
 
-t_column_sizes	*ft_get_column_size(t_list *files, char *toptions)
+int				ft_get_user_size(t_file *file)
 {
-	int				tmp;
+	int				size;
+	struct passwd	*pass;
+
+	if (g_toptions[o_n])
+		size = ft_nbrsize(file->stat.st_uid);
+	else
+	{
+		pass = getpwuid(file->stat.st_uid);
+		size = ft_strlen(pass->pw_name);
+	}
+	return (size);
+}
+
+int				ft_get_nlink_size(t_file *file)
+{
+	return (ft_nbrsize(file->stat.st_nlink));
+}
+
+int				ft_get_group_size(t_file *file)
+{
+	int				size;
+	struct group	*group;
+
+	if (g_toptions[o_n])
+		size = ft_nbrsize(file->stat.st_gid);
+	else
+	{
+		group = getgrgid(file->stat.st_gid);
+		size = ft_strlen(group->gr_name);
+	}
+	return (size);
+}
+
+int				ft_get_size_size(t_file *file)
+{
+	return (ft_nbrsize(file->stat.st_size));
+}
+
+int				ft_get_flags_size(t_file *file)
+{
+	return (ft_strlen(fflagstostr(file->stat.st_flags)));
+}
+
+int				ft_get_s_size(t_file *file)
+{
+	return (ft_nbrsize(ft_get_size(file)));
+}
+
+void			ft_set_max(int *a, int tmp)
+{
+	*a = *a < tmp ? tmp : *a;
+}
+
+t_column_sizes	*ft_get_column_size(t_list *files)
+{
+	t_file			*file;
 	t_column_sizes	*cs;
 
 	cs = ft_new_column_sizes();
 	while (files != NULL)
 	{
-		tmp = ft_nbrsize(((t_file*)files->content)->stat.st_nlink);
-		cs->nlink = cs->nlink < tmp ? tmp : cs->nlink;
-		tmp = ft_nbrsize(((t_file*)files->content)->stat.st_size);
-		cs->size = cs->size < tmp ? tmp : cs->size;
-		if (toptions[o_n])
-			tmp = ft_nbrsize(((t_file*)files->content)->stat.st_uid);
-		else
-			tmp = ft_strlen(getpwuid(((t_file*)files->content)->
-						stat.st_uid)->pw_name);
-		cs->user = cs->user < tmp ? tmp : cs->user;
-		if (toptions[o_n])
-			tmp = ft_nbrsize(((t_file*)files->content)->stat.st_gid);
-		else
-			tmp = ft_strlen(getgrgid(((t_file*)files->content)
-						->stat.st_gid)->gr_name);
-		cs->group = cs->group < tmp ? tmp : cs->group;
-		if (toptions[o_O])
-			tmp = ft_strlen(fflagstostr(((t_file*)files->content)->stat.st_flags));
-		cs->flags = cs->flags < tmp ? tmp : cs->flags;
+		if (g_toptions[o_l])
+		{
+			file = ((t_file*)files->content);
+			ft_set_max(&(cs->nlink), ft_get_nlink_size(file));
+			ft_set_max(&(cs->size), ft_get_size_size(file));
+			ft_set_max(&(cs->user), ft_get_user_size(file));
+			ft_set_max(&(cs->group), ft_get_group_size(file));
+		}
+		if (g_toptions[o_O])
+			ft_set_max(&(cs->flags), ft_get_flags_size(file));
+		if (g_toptions[o_s])
+			ft_set_max(&(cs->s), ft_get_s_size(file));
 		files = files->next;
 	}
 	return (cs);
 }
 
-void	ft_displayls(t_list *files, char *toptions)
+void	ft_displayls(t_list *files)
 {
-	if (toptions[o_l])
-		ft_display_l(files, toptions);
-	else if (toptions[o_x])
-		ft_display_x(files, toptions);
-	else if (toptions[o_C])
-		ft_display_c_(files, toptions);
-	else if (toptions[o_m])
-		ft_display_m(files, toptions);
+	if (g_toptions[o_l])
+		ft_display_l(files);
+	else if (g_toptions[o_x])
+		ft_display_x(files);
+	else if (g_toptions[o_C])
+		ft_display_c_(files);
+	else if (g_toptions[o_m])
+		ft_display_m(files);
 	else
-		ft_display_1(files, toptions);
+		ft_display_1(files);
 }
