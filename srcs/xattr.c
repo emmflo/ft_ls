@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 11:28:13 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/20 11:53:42 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/05/01 22:09:21 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	get_xattr_names(t_file *file)
 {
-	int		buff_size;
 	char	*attr_names;
 	t_list	*attrs;
 	t_list	*ptr;
@@ -26,11 +25,13 @@ void	get_xattr_names(t_file *file)
 	attrs = NULL;
 	ptr = NULL;
 	path = make_path(file->path, file->dirent.d_name);
-	buff_size = listxattr(path, NULL, 0, 0);
-	attr_names = ft_strnew(buff_size);
-	listxattr(path, attr_names, buff_size, 0);
+	file->xattrs_buffsize = listxattr(path, NULL, 0, XATTR_NOFOLLOW);
+	if (file->xattrs_buffsize < 0)
+		file->xattrs_buffsize = 0;
+	attr_names = ft_strnew(file->xattrs_buffsize);
+	listxattr(path, attr_names, file->xattrs_buffsize, XATTR_NOFOLLOW);
 	i = 0;
-	while (i < buff_size)
+	while (i < file->xattrs_buffsize)
 	{
 		if (!(attr = malloc(sizeof(t_xattr))))
 			return ;

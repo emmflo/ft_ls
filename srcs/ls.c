@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/20 16:22:07 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/05/01 21:53:09 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ char	*make_path(char *path, char *name)
 {
 	char	*str;
 	int		offset;
+	int		path_len;
 
 	offset = 0;
-	if (path[ft_strlen(path) - 1] != '/')
+	path_len = ft_strlen(path);
+	if (path_len > 0 && path[path_len - 1] != '/')
 		offset = 1;
-	str = ft_strnew(ft_strlen(path) + ft_strlen(name) + offset);
+	str = ft_strnew(path_len + ft_strlen(name) + offset);
 	ft_strcat(str, path);
 	if (offset)
 		ft_strcat(str, "/");
@@ -390,7 +392,7 @@ t_file	*ft_makefile(char *path, struct dirent *dirent)
 	if (dirent == NULL)
 	{
 		dirent = ft_makedirent(path);
-		path = "./";
+		path = "";
 	}
 	if (!(buff_stat = malloc(sizeof(struct stat))))
 		return (NULL);
@@ -473,7 +475,7 @@ char	*ft_newg_toptions(void)
 
 void	ft_files(t_list *dirs)
 {
-	int			temp;
+	//int			temp;
 	struct stat	stat;
 	t_list		*files;
 	t_list		*ptr;
@@ -490,10 +492,10 @@ void	ft_files(t_list *dirs)
 		}
 		dirs = dirs->next;
 	}
-	temp = g_toptions[o_d];
-	g_toptions[o_d] = 1;
+	//temp = g_toptions[o_d];
+	//g_toptions[o_d] = 1;
 	ft_list_d(files);
-	g_toptions[o_d] = temp;
+	//g_toptions[o_d] = temp;
 	if (files != NULL)
 		ft_putchar('\n');
 }
@@ -507,10 +509,10 @@ void	ft_ls(char *options, t_list *dirs)
 	ft_get_prefs(g_toptions);
 	lsopt(options);
 	ft_strdel(&options);
+	if (dirs == NULL)
+		dirs = ft_lstnew(ft_strdup("."), 2);
 	if (g_toptions[o_d])
 		ft_list_d(dirs);
-	else if (dirs == NULL)
-		ft_dir("./");
 	else if (dirs->next == NULL)
 		ft_dir(dirs->content);
 	else

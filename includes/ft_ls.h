@@ -29,6 +29,7 @@ typedef struct s_file {
 	char			*path;
 	struct dirent	dirent;
 	struct stat		stat;
+	int				xattrs_buffsize;
 	t_list			*xattrs;
 	acl_t			acl;
 } t_file;
@@ -41,6 +42,7 @@ typedef struct		s_column_sizes
 	int		group;
 	int		flags;
 	int		s;
+	int		ino;
 }					t_column_sizes;
 
 typedef struct		s_tab
