@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/05/01 22:09:00 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/05/09 18:47:25 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -598,6 +598,7 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs)
 
 long long int	ft_get_size(t_file *file)
 {
+	printf("%s %lld\n", file->dirent.d_name, (file->stat.st_blocks * file->stat.st_blksize / 4096));
 	return (file->stat.st_blocks * file->stat.st_blksize / 4096);
 }
 
