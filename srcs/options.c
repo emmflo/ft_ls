@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:28 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/05/01 19:13:52 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/05/10 21:46:48 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	ft_override_opt(char opt)
 		g_toptions[o_a] = 1;
 	if (opt == 'p')
 		g_toptions[o_F] = 0;
+	if (opt == 'H' || opt == 'P')
+		g_toptions[o_L] = 0;
 }
 
 char	*lsopt(char *options)

@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 11:28:13 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/05/01 22:09:21 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/05/10 21:44:13 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	get_xattr_names(t_file *file)
 		if (!(attr = malloc(sizeof(t_xattr))))
 			return ;
 		attr->name = ft_strdup(&attr_names[i]);
-		attr->size = getxattr(path, attr->name, NULL, 0, 0, 0);
+		attr->size = getxattr(path, attr->name, NULL, 0, 0, XATTR_NOFOLLOW);
 		if (!(attr->attr = malloc(attr->size)))
 			return ;
-		getxattr(path, attr->name, attr->attr, attr->size, 0, 0);
+		getxattr(path, attr->name, attr->attr, attr->size, 0, XATTR_NOFOLLOW);
 		offset = ft_strlen(attr->name) + 1;
 		ft_lstconstruct(&attrs, &ptr, ft_lstnew(attr, sizeof(t_xattr)));
 		i += offset;
@@ -58,7 +58,7 @@ void	ft_display_xattrs(t_file *file)
 		ft_putstr(((t_xattr*)ptr->content)->name);
 		ft_putstr("\t");
 		ft_putnbr_fixed(((t_xattr*)ptr->content)->size, 3, 1);
-		ft_putstr("\n");
+		ft_putstr(" \n");
 		ptr = ptr->next;
 	}
 }

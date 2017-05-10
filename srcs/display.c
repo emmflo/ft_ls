@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/05/09 18:47:25 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/05/10 23:17:02 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,23 @@ void	ft_putino(t_list *files, t_column_sizes *cs)
 	ft_putchar(' ');
 }
 
-char	*ft_f__str(struct stat *buff_stat)
+char	ft_f__char(struct stat *buff_stat)
 {
 	if ((buff_stat->st_mode & S_IFMT) == S_IFDIR)
-		return ("/");
+		return ('/');
 	else if ((buff_stat->st_mode & S_IFMT) == S_IFREG &&
 			(buff_stat->st_mode & S_IXUSR) != 0)
-		return ("*");
+		return ('*');
 	else if ((buff_stat->st_mode & S_IFMT) == S_IFLNK)
-		return ("@");
+		return ('@');
 	else if ((buff_stat->st_mode & S_IFMT) == S_IFSOCK)
-		return ("=");
+		return ('=');
 	else if ((buff_stat->st_mode & S_IFMT) == S_IFWHT)
-		return ("%");
+		return ('%');
 	else if ((buff_stat->st_mode & S_IFMT) == S_IFIFO)
-		return ("|");
+		return ('|');
 	else
-		return ("");
+		return ('\0');
 }
 
 int		ft_len_name(t_list *files, t_column_sizes *cs)
@@ -187,7 +187,7 @@ char	*ft_str_name(t_list *files, t_column_sizes *cs)
 
 	buff_stat = &((t_file*)files->content)->stat;
 	str = ft_strnew(ft_len_name(files, cs)
-			+ g_toptions[o_F] + 20 * g_toptions[o_G]);
+			+ g_toptions[o_F] + g_toptions[o_p] + 20 * g_toptions[o_G]);
 	str[0] = '\0';
 	ft_color_name_start(str, buff_stat);
 	if (g_toptions[o_q])
@@ -200,7 +200,10 @@ char	*ft_str_name(t_list *files, t_column_sizes *cs)
 	free(name);
 	ft_color_name_end(str);
 	if (g_toptions[o_F])
-		ft_strcat(str, ft_f__str(buff_stat));
+	{
+		str[ft_strlen(str)+1] = '\0';
+		str[ft_strlen(str)] = ft_f__char(buff_stat);
+	}
 	else if (g_toptions[o_p] && (buff_stat->st_mode & S_IFMT) == S_IFDIR)
 		ft_strcat(str, "/");
 	return (str);
@@ -529,7 +532,7 @@ void	print_date(struct stat *buff_stat)
 		str[ft_strlen(str) - 14] = '\0';
 	}
 	ft_putstr(str + 4);
-	if (((t + 15768000) <= now) || t > now)
+	if (!g_toptions[o_T] && (((t + 15768000) <= now) || t > now))
 	{
 		ft_putstr("  ");
 		ft_putstr(str + 20);
@@ -573,9 +576,9 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs)
 	if (g_toptions[o_O])
 	{
 		if (buff_stat->st_flags != 0)
-			ft_putstr_fixed(fflagstostr(buff_stat->st_flags), cs->flags, 1);
+			ft_putstr_fixed(fflagstostr(buff_stat->st_flags), cs->flags, 0);
 		else
-			ft_putstr_fixed("-", cs->flags, 1);
+			ft_putstr_fixed("-", cs->flags, 0);
 		ft_putstr(" ");
 	}
 	ft_putnbr_fixed(buff_stat->st_size, cs->size, 1);
@@ -598,8 +601,7 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs)
 
 long long int	ft_get_size(t_file *file)
 {
-	printf("%s %lld\n", file->dirent.d_name, (file->stat.st_blocks * file->stat.st_blksize / 4096));
-	return (file->stat.st_blocks * file->stat.st_blksize / 4096);
+	return (file->stat.st_blocks);
 }
 
 long long int	ft_get_total(t_list *files)

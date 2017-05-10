@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/17 15:50:08 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/17 17:00:14 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/05/10 22:46:00 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*ft_str_name_q(t_list *files)
 	return (str);
 }
 
-char	*ft_str_name_b(t_list *files, char *toptions)
+char	*ft_str_name_b(t_list *files)
 {
 	int		size;
 	char	*ptr;
@@ -87,7 +87,7 @@ char	*ft_str_name_b(t_list *files, char *toptions)
 	{
 		if (isprint(*ptr))
 			size++;
-		else if (toptions[o_b] && ft_escape(*ptr))
+		else if (g_toptions[o_b] && ft_escape(*ptr))
 			size += 2;
 		else
 			size += 4;
@@ -100,7 +100,7 @@ char	*ft_str_name_b(t_list *files, char *toptions)
 	{
 		if (isprint(*ptr))
 			str[i++] = *ptr;
-		else if (toptions[o_b] && ft_escape(*ptr))
+		else if (g_toptions[o_b] && ft_escape(*ptr))
 		{
 			str[i] = '\\';
 			str[i + 1] = ft_char_to_escape(*ptr);

@@ -12,7 +12,7 @@ OBJLIST := \
 	ls.o \
 	print.o
 OBJS := $(addprefix $(OBJDIR)/,$(OBJLIST))
-SRCS := $(addprefix $(SRCDIR)/,$(OBJLIST))
+DEPS := $(OBJS:.o=.d)
 LIB := -L libft -lft
 CC := clang
 INCDIR := -I./libft/includes -I./includes
@@ -29,7 +29,7 @@ $(NAME) : libft/libft.a $(OBJS)
 	$(CC) $(DEBUG) $(OBJS) -o $@ $(LIB)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
-	$(CC) $(DEBUG) $(CFLAGS) -c $< -o $@
+	$(CC) $(DEBUG) $(CFLAGS) -MMD -MT "$@" -MP -c $< -o $@
 
 $(OBJS): | $(OBJDIR)
 
@@ -53,3 +53,5 @@ libft_clean :
 
 libft_fclean :
 	make fclean -C libft
+
+-include $(DEPS)
