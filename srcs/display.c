@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/05/10 23:17:02 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/05/12 17:01:23 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int		ft_len_name(t_list *files, t_column_sizes *cs)
 		len++;
 	if (g_toptions[o_i])
 		len += cs->ino + 1;
-		//len += ft_nbrsize(((t_file*)files->content)->stat.st_ino) + 1;
 	return (len);
 }
 
@@ -199,11 +198,9 @@ char	*ft_str_name(t_list *files, t_column_sizes *cs)
 	ft_strcat(str, name);
 	free(name);
 	ft_color_name_end(str);
+	str[ft_strlen(str) + 1] = '\0';
 	if (g_toptions[o_F])
-	{
-		str[ft_strlen(str)+1] = '\0';
 		str[ft_strlen(str)] = ft_f__char(buff_stat);
-	}
 	else if (g_toptions[o_p] && (buff_stat->st_mode & S_IFMT) == S_IFDIR)
 		ft_strcat(str, "/");
 	return (str);
@@ -269,17 +266,12 @@ void	ft_putnchar(char c, int nb)
 		ft_putchar(c);
 }
 
-void	ft_display_x(t_list *files, t_column_sizes *cs)
+void	ft_print_x(t_list *files, t_column_sizes *cs, int max, int nb_columns)
 {
-	int		max;
-	int		nb_columns;
 	int		i;
 	int		len;
 	char	*str;
 
-	max = ft_get_max_len(files, cs);
-	max = max + (8 - max % 8);
-	nb_columns = g_columns / max;
 	i = 0;
 	while (files != NULL)
 	{
@@ -291,14 +283,24 @@ void	ft_display_x(t_list *files, t_column_sizes *cs)
 		ft_strdel(&str);
 		if (len % 8 != 0)
 			ft_putchar('\t');
-		//if (j < tab->tab_len - 1) 
-			ft_putnchar('\t', (max - len) / 8);
+		ft_putnchar('\t', (max - len) / 8);
 		if (i++ % nb_columns == nb_columns - 1)
 			ft_putchar('\n');
 		files = files->next;
 	}
 	if (i % nb_columns != 0)
 		ft_putchar('\n');
+}
+
+void	ft_display_x(t_list *files, t_column_sizes *cs)
+{
+	int		max;
+	int		nb_columns;
+
+	max = ft_get_max_len(files, cs);
+	max = max + (8 - max % 8);
+	nb_columns = g_columns / max;
+	ft_print_x(files, cs, max, nb_columns);
 }
 
 t_list	**ft_make_file_tab(t_list *files)
@@ -330,7 +332,8 @@ int		ft_get_nb_lines_c_(int max, int tab_len)
 	return (nb_lines);
 }
 
-void	ft_print_c_(int j, t_tab *tab, int nb_lines, int max, t_column_sizes *cs)
+void	ft_print_c_(int j, t_tab *tab, int nb_lines, int max,
+		t_column_sizes *cs)
 {
 	char	*str;
 	int		len;
@@ -345,7 +348,7 @@ void	ft_print_c_(int j, t_tab *tab, int nb_lines, int max, t_column_sizes *cs)
 		ft_strdel(&str);
 		if (len % 8 != 0)
 			ft_putchar('\t');
-		if (j < tab->tab_len - 1) 
+		if (j < tab->tab_len - 1)
 			ft_putnchar('\t', (max - len) / 8);
 		j += nb_lines;
 	}
@@ -415,13 +418,8 @@ char	*ft_init_permission_str(void)
 	return (permissions);
 }
 
-char	*ft_permission_to_str(t_file *file)
+void	ft_permission_user(char *permissions, struct stat *buff_stat)
 {
-	char		*permissions;
-	struct stat	*buff_stat;
-
-	buff_stat = &(file->stat);
-	permissions = ft_init_permission_str();
 	if ((buff_stat->st_mode & S_IRUSR) != 0)
 		permissions[0] = 'r';
 	if ((buff_stat->st_mode & S_IWUSR) != 0)
@@ -433,6 +431,10 @@ char	*ft_permission_to_str(t_file *file)
 			permissions[2] = 'x';
 	else if ((buff_stat->st_mode & S_ISUID) != 0)
 		permissions[2] = 'S';
+}
+
+void	ft_permission_group(char *permissions, struct stat *buff_stat)
+{
 	if ((buff_stat->st_mode & S_IRGRP) != 0)
 		permissions[3] = 'r';
 	if ((buff_stat->st_mode & S_IWGRP) != 0)
@@ -444,6 +446,10 @@ char	*ft_permission_to_str(t_file *file)
 			permissions[5] = 'x';
 	else if ((buff_stat->st_mode & S_ISGID) != 0)
 		permissions[5] = 'S';
+}
+
+void	ft_permission_other(char *permissions, struct stat *buff_stat)
+{
 	if ((buff_stat->st_mode & S_IROTH) != 0)
 		permissions[6] = 'r';
 	if ((buff_stat->st_mode & S_IWOTH) != 0)
@@ -455,10 +461,27 @@ char	*ft_permission_to_str(t_file *file)
 			permissions[8] = 'x';
 	else if ((buff_stat->st_mode & S_ISVTX) != 0)
 		permissions[8] = 'T';
+}
+
+void	ft_permission_extra(char *permissions, t_file *file)
+{
 	if (file->xattrs_buffsize > 0)
 		permissions[9] = '@';
 	else if (file->acl != NULL)
 		permissions[9] = '+';
+}
+
+char	*ft_permission_to_str(t_file *file)
+{
+	char		*permissions;
+	struct stat	*buff_stat;
+
+	buff_stat = &(file->stat);
+	permissions = ft_init_permission_str();
+	ft_permission_user(permissions, buff_stat);
+	ft_permission_group(permissions, buff_stat);
+	ft_permission_other(permissions, buff_stat);
+	ft_permission_extra(permissions, file);
 	return (permissions);
 }
 
@@ -540,21 +563,18 @@ void	print_date(struct stat *buff_stat)
 	ft_putchar(' ');
 }
 
-void	ft_display_l_file(t_list *file, t_column_sizes *cs)
+void	ft_print_perm_and_type(t_file *file_content, struct stat *buff_stat)
 {
-	t_file		*file_content;
-	struct stat	*buff_stat;
-	char		*str;
+	char	*str;
 
-	file_content = ((t_file*)file->content);
-	buff_stat = &file_content->stat;
-	if (g_toptions[o_i])
-		ft_putino(file, cs);
 	ft_putchar(ft_type_to_char(buff_stat));
-	ft_putstr(ft_permission_to_str(file_content));
-	ft_putstr(" ");
-	ft_putnbr_fixed(buff_stat->st_nlink, cs->nlink, 1);
-	ft_putstr(" ");
+	str = ft_permission_to_str(file_content);
+	ft_putstr(str);
+	ft_strdel(&str);
+}
+
+void	ft_print_group_and_user(struct stat *buff_stat, t_column_sizes *cs)
+{
 	if (!g_toptions[o_g])
 	{
 		if (g_toptions[o_n])
@@ -573,6 +593,23 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs)
 	}
 	if (g_toptions[o_o] && g_toptions[o_g])
 		ft_putstr("  ");
+}
+
+void	ft_display_l_file(t_list *file, t_column_sizes *cs)
+{
+	t_file		*file_content;
+	struct stat	*buff_stat;
+	char		*str;
+
+	file_content = ((t_file*)file->content);
+	buff_stat = &file_content->stat;
+	if (g_toptions[o_i])
+		ft_putino(file, cs);
+	ft_print_perm_and_type(file_content, buff_stat);
+	ft_putstr(" ");
+	ft_putnbr_fixed(buff_stat->st_nlink, cs->nlink, 1);
+	ft_putstr(" ");
+
 	if (g_toptions[o_O])
 	{
 		if (buff_stat->st_flags != 0)
@@ -621,7 +658,6 @@ void	ft_display_l(t_list *files, t_column_sizes *cs)
 {
 	long long int	total;
 
-	//if (!g_toptions[o_d] && files != NULL && files->next != NULL)
 	if (!g_toptions[o_d] && files != NULL)
 	{
 		total = ft_get_total(files);
