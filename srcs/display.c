@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/05/12 17:01:23 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/05/16 15:25:09 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -609,7 +609,7 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs)
 	ft_putstr(" ");
 	ft_putnbr_fixed(buff_stat->st_nlink, cs->nlink, 1);
 	ft_putstr(" ");
-
+	ft_print_group_and_user(buff_stat, cs);
 	if (g_toptions[o_O])
 	{
 		if (buff_stat->st_flags != 0)
