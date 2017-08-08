@@ -6,31 +6,22 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 11:28:13 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/05/10 21:44:13 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/08 22:13:00 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	get_xattr_names(t_file *file)
+void	make_xattr_names(t_file *file, char *attr_names, t_list *attrs,
+		char *path)
 {
-	char	*attr_names;
-	t_list	*attrs;
-	t_list	*ptr;
 	ssize_t	i;
 	ssize_t	offset;
+	t_list	*ptr;
 	t_xattr	*attr;
-	char	*path;
 
-	attrs = NULL;
-	ptr = NULL;
-	path = make_path(file->path, file->dirent.d_name);
-	file->xattrs_buffsize = listxattr(path, NULL, 0, XATTR_NOFOLLOW);
-	if (file->xattrs_buffsize < 0)
-		file->xattrs_buffsize = 0;
-	attr_names = ft_strnew(file->xattrs_buffsize);
-	listxattr(path, attr_names, file->xattrs_buffsize, XATTR_NOFOLLOW);
 	i = 0;
+	ptr = NULL;
 	while (i < file->xattrs_buffsize)
 	{
 		if (!(attr = malloc(sizeof(t_xattr))))
@@ -44,6 +35,22 @@ void	get_xattr_names(t_file *file)
 		ft_lstconstruct(&attrs, &ptr, ft_lstnew(attr, sizeof(t_xattr)));
 		i += offset;
 	}
+}
+
+void	get_xattr_names(t_file *file)
+{
+	char	*attr_names;
+	t_list	*attrs;
+	char	*path;
+
+	attrs = NULL;
+	path = make_path(file->path, file->dirent.d_name);
+	file->xattrs_buffsize = listxattr(path, NULL, 0, XATTR_NOFOLLOW);
+	if (file->xattrs_buffsize < 0)
+		file->xattrs_buffsize = 0;
+	attr_names = ft_strnew(file->xattrs_buffsize);
+	listxattr(path, attr_names, file->xattrs_buffsize, XATTR_NOFOLLOW);
+	make_xattr_names(file, attr_names, attrs, path);
 	file->xattrs = attrs;
 }
 
@@ -52,7 +59,7 @@ void	ft_display_xattrs(t_file *file)
 	t_list	*ptr;
 
 	ptr = file->xattrs;
-	while (ptr !=NULL)
+	while (ptr != NULL)
 	{
 		ft_putstr("\t");
 		ft_putstr(((t_xattr*)ptr->content)->name);

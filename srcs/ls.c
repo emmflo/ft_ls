@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/05/11 00:07:51 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/08 22:46:19 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,14 +296,22 @@ int		ft_inoinlst(t_list *visited, ino_t ino)
 	return (0);
 }
 
-void	ft_recursive(t_list *files, char *path)
+void	ft_print_header(t_file *content, char *name)
 {
-	static t_list	*visited = NULL;
-	static t_list	*ptr = NULL;
-	t_list			*prev;
-	struct stat		buff_stat;
 	char			*str;
-	char			*name;
+
+	ft_putchar('\n');
+	str = make_path(content->path, name);
+	ft_putstr(str);
+	ft_putstr(":\n");
+	ft_dir(str);
+	free(str);
+}
+
+void	ft_manage_ptr_start(char *path, t_list *visited, t_list *ptr,
+		t_list *prev)
+{
+	struct stat		buff_stat;
 	ino_t			*tmp;
 
 	stat(path, &buff_stat);
@@ -312,6 +320,17 @@ void	ft_recursive(t_list *files, char *path)
 	*tmp = buff_stat.st_ino;
 	prev = ptr;
 	ft_lstconstruct(&visited, &ptr, ft_lstnew(tmp, sizeof(ino_t)));
+}
+
+void	ft_recursive(t_list *files, char *path)
+{
+	static t_list	*visited = NULL;
+	static t_list	*ptr = NULL;
+	t_list			*prev;
+	char			*name;
+
+	prev = NULL;
+	ft_manage_ptr_start(path, visited, ptr, prev);
 	while (files != NULL)
 	{
 		name = ((t_file*)files->content)->dirent.d_name;
@@ -320,14 +339,7 @@ void	ft_recursive(t_list *files, char *path)
 		else if (ft_inoinlst(visited, ((t_file*)files->content)->stat.st_ino))
 			ft_print_error(name, "directory causes a cycle");
 		else if ((((t_file*)files->content)->stat.st_mode & S_IFMT) == S_IFDIR)
-		{
-			ft_putchar('\n');
-			str = make_path(((t_file*)files->content)->path, name);
-			ft_putstr(str);
-			ft_putstr(":\n");
-			ft_dir(str);
-			free(str);
-		}
+			ft_print_header(((t_file*)files->content), name);
 		files = files->next;
 	}
 	if (ptr != visited)
@@ -383,10 +395,24 @@ struct dirent	*ft_makedirent(char *path)
 	return (dirent);
 }
 
+t_file	*ft_makefile_commit(char *path, struct dirent *dirent,
+		struct stat *buff_stat)
+{
+	t_file		*file;
+
+	file = malloc(sizeof(*file));
+	file->path = ft_strdup(path);
+	file->dirent = *dirent;
+	file->stat = *buff_stat;
+	get_xattr_names(file);
+	ft_get_acls(file);
+	free(buff_stat);
+	return (file);
+}
+
 t_file	*ft_makefile(char *path, struct dirent *dirent)
 {
 	struct stat	*buff_stat;
-	t_file		*file;
 	char		*str;
 
 	if (dirent == NULL)
@@ -405,14 +431,7 @@ t_file	*ft_makefile(char *path, struct dirent *dirent)
 	if (ft_check_errno(dirent->d_name))
 		return (NULL);
 	free(str);
-	file = malloc(sizeof(*file));
-	file->path = ft_strdup(path);
-	file->dirent = *dirent;
-	file->stat = *buff_stat;
-	get_xattr_names(file);
-	ft_get_acls(file);
-	free(buff_stat);
-	return (file);
+	return (ft_makefile_commit(path, dirent, buff_stat));
 }
 
 t_list	*ft_makefilelist(char *path, DIR *dir)
@@ -475,7 +494,6 @@ char	*ft_newg_toptions(void)
 
 void	ft_files(t_list *dirs)
 {
-	//int			temp;
 	struct stat	stat;
 	t_list		*files;
 	t_list		*ptr;
@@ -492,10 +510,7 @@ void	ft_files(t_list *dirs)
 		}
 		dirs = dirs->next;
 	}
-	//temp = g_toptions[o_d];
-	//g_toptions[o_d] = 1;
 	ft_list_d(files);
-	//g_toptions[o_d] = temp;
 	if (files != NULL)
 		ft_putchar('\n');
 }
