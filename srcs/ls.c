@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/08 22:46:19 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/08 23:14:39 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -515,9 +515,10 @@ void	ft_files(t_list *dirs)
 		ft_putchar('\n');
 }
 
+//void	ft_ls_start(char *options)
+
 void	ft_ls(char *options, t_list *dirs)
 {
-	char	*g_toptions;
 	t_list	*ptr;
 
 	g_toptions = ft_newg_toptions();

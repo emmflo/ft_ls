@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/08/08 22:55:49 by eflorenz          #+#    #+#             */
+/*   Updated: 2017/08/08 22:59:54 by eflorenz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-int		ft_lstlen(t_list *list)
+int			ft_lstlen(t_list *list)
 {
 	int	i;
 
@@ -13,42 +25,34 @@ int		ft_lstlen(t_list *list)
 	return (i);
 }
 
-t_list	*ft_merge(t_list *a, t_list *b, int cmp(void *, void *))
+static void	add_to_result(t_list *r, t_list *result, t_list *ab)
+{
+	if (result == NULL)
+	{
+		result = ab;
+		r = result;
+	}
+	else
+	{
+		result->next = ab;
+		result = result->next;
+	}
+	ab = ab->next;
+}
+
+t_list		*ft_merge(t_list *a, t_list *b, int cmp(void *, void *))
 {
 	t_list	*r;
 	t_list	*result;
 
+	r = NULL;
 	result = NULL;
 	while (a != NULL && b != NULL)
 	{
 		if (cmp(a->content, b->content) <= 0)
-		{
-			if (result == NULL)
-			{
-				result = a;
-				r = result;
-			}
-			else
-			{
-				result->next = a;
-				result = result->next;
-			}
-			a = a->next;
-		}
+			add_to_result(r, result, a);
 		else
-		{
-			if (result == NULL)
-			{
-				result = b;
-				r = result;
-			}
-			else
-			{
-				result->next = b;
-				result = result->next;
-			}
-			b = b->next;
-		}
+			add_to_result(r, result, b);
 	}
 	if (a != NULL)
 		result->next = a;
@@ -57,7 +61,7 @@ t_list	*ft_merge(t_list *a, t_list *b, int cmp(void *, void *))
 	return (r);
 }
 
-t_list	*ft_merge_sort(t_list *list, int cmp(void *, void *))
+t_list		*ft_merge_sort(t_list *list, int cmp(void *, void *))
 {
 	t_list	*left;
 	t_list	*right;
