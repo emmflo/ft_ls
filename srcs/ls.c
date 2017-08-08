@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/08 23:14:39 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/08 23:30:36 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -515,18 +515,21 @@ void	ft_files(t_list *dirs)
 		ft_putchar('\n');
 }
 
-//void	ft_ls_start(char *options)
+void	ft_ls_start(char *options, t_list **dirs)
+{
+	g_toptions = ft_newg_toptions();
+	ft_get_prefs(g_toptions);
+	lsopt(options);
+	ft_strdel(&options);
+	if (*dirs == NULL)
+		*dirs = ft_lstnew(ft_strdup("."), 2);
+}
 
 void	ft_ls(char *options, t_list *dirs)
 {
 	t_list	*ptr;
 
-	g_toptions = ft_newg_toptions();
-	ft_get_prefs(g_toptions);
-	lsopt(options);
-	ft_strdel(&options);
-	if (dirs == NULL)
-		dirs = ft_lstnew(ft_strdup("."), 2);
+	ft_ls_start(options, &dirs);
 	if (g_toptions[o_d])
 		ft_list_d(dirs);
 	else if (dirs->next == NULL)
