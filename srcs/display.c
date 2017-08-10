@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/08 23:39:59 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/10 20:38:03 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,33 +19,7 @@ extern char	*g_colors;
 extern char	g_colors_tab[][6];
 extern char	*g_lscolors;
 
-char	*ft_itoa(int nb)
-{
-	int		len;
-	char	*str;
-	int		i;
-	int		neg;
-
-	len = ft_nbrsize(nb);
-	str = ft_strnew(len);
-	neg = 0;
-	if (nb == 0)
-		return (strcpy(str, "0"));
-	if (nb < 0)
-	{
-		nb = -nb;
-		neg = 1;
-		str[0] = '-';
-	}
-	i = len - neg - 1;
-	while (i >= 0)
-	{
-		str[neg + i] = (nb % 10) + '0';
-		nb /= 10;
-		i--;
-	}
-	return (str);
-}
+char	*ft_itoa(int nb);
 
 void	ft_putino(t_list *files, t_column_sizes *cs)
 {
@@ -535,11 +509,46 @@ int		ft_abs(int nb)
 		return (nb);
 }
 
+void	print_date_t(long t)
+{
+	char	*str;
+	long	now;
+
+	now = time(NULL);
+	str = ctime(&t);
+	str[ft_strlen(str) - 1] = '\0';
+	ft_putstr(str + 4);
+	ft_putchar(' ');
+}
+
+void	print_date_(long t)
+{
+	char	*str;
+	long	now;
+	int		six_month;
+
+	now = time(NULL);
+	str = ctime(&t);
+	six_month = ((t + 15768000) <= now) || t > now;
+	if (!six_month)
+		str[ft_strlen(str) - 9] = '\0';
+	else
+	{
+		str[ft_strlen(str) - 1] = '\0';
+		str[ft_strlen(str) - 14] = '\0';
+	}
+	ft_putstr(str + 4);
+	if (six_month)
+	{
+		ft_putstr("  ");
+		ft_putstr(str + 20);
+	}
+	ft_putchar(' ');
+}
+
 void	print_date(struct stat *buff_stat)
 {
-	char			*str;
 	long			t;
-	long			now;
 
 	if (g_toptions[o_c])
 		t = (buff_stat->st_ctimespec.tv_sec);
@@ -549,24 +558,10 @@ void	print_date(struct stat *buff_stat)
 		t = (buff_stat->st_atimespec.tv_sec);
 	else
 		t = (buff_stat->st_mtimespec.tv_sec);
-	now = time(NULL);
-	str = ctime(&t);
 	if (g_toptions[o_T])
-		str[ft_strlen(str) - 1] = '\0';
-	else if (((t + 15768000) > now) && t <= now)
-		str[ft_strlen(str) - 9] = '\0';
+		print_date_t(t);
 	else
-	{
-		str[ft_strlen(str) - 1] = '\0';
-		str[ft_strlen(str) - 14] = '\0';
-	}
-	ft_putstr(str + 4);
-	if (!g_toptions[o_T] && (((t + 15768000) <= now) || t > now))
-	{
-		ft_putstr("  ");
-		ft_putstr(str + 20);
-	}
-	ft_putchar(' ');
+		print_date_(t);
 }
 
 void	ft_print_perm_and_type(t_file *file_content, struct stat *buff_stat)
@@ -601,14 +596,9 @@ void	ft_print_group_and_user(struct stat *buff_stat, t_column_sizes *cs)
 		ft_putstr("  ");
 }
 
-void	ft_display_l_file(t_list *file, t_column_sizes *cs)
+void	ft_display_l_file_first_part(t_list *file, t_column_sizes *cs,
+		struct stat *buff_stat, t_file *file_content)
 {
-	t_file		*file_content;
-	struct stat	*buff_stat;
-	char		*str;
-
-	file_content = ((t_file*)file->content);
-	buff_stat = &file_content->stat;
 	if (g_toptions[o_i])
 		ft_putino(file, cs);
 	ft_print_perm_and_type(file_content, buff_stat);
@@ -616,6 +606,11 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs)
 	ft_putnbr_fixed(buff_stat->st_nlink, cs->nlink, 1);
 	ft_putstr(" ");
 	ft_print_group_and_user(buff_stat, cs);
+}
+
+void	ft_display_l_file_second_part(t_column_sizes *cs,
+		struct stat *buff_stat)
+{
 	if (g_toptions[o_O])
 	{
 		if (buff_stat->st_flags != 0)
@@ -627,6 +622,13 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs)
 	ft_putnbr_fixed(buff_stat->st_size, cs->size, 1);
 	ft_putstr(" ");
 	print_date(buff_stat);
+}
+
+void	ft_display_l_file_third_part(t_list *file, t_column_sizes *cs,
+		struct stat *buff_stat, t_file *file_content)
+{
+	char		*str;
+
 	ft_display_name(file, cs);
 	if (ft_type_to_char(buff_stat) == 'l')
 	{
@@ -640,6 +642,18 @@ void	ft_display_l_file(t_list *file, t_column_sizes *cs)
 		ft_display_xattrs(file_content);
 	if (g_toptions[o_e])
 		ft_display_acls(file_content);
+}
+
+void	ft_display_l_file(t_list *file, t_column_sizes *cs)
+{
+	t_file		*file_content;
+	struct stat	*buff_stat;
+
+	file_content = ((t_file*)file->content);
+	buff_stat = &file_content->stat;
+	ft_display_l_file_first_part(file, cs, buff_stat, file_content);
+	ft_display_l_file_second_part(cs, buff_stat);
+	ft_display_l_file_third_part(file, cs, buff_stat, file_content);
 }
 
 long long int	ft_get_size(t_file *file)
