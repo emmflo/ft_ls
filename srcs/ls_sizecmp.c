@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display.c                                          :+:      :+:    :+:   */
+/*   ls_sizecmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:25:07 by eflorenz         ###   ########.fr       */
+/*   Created: 2017/08/11 03:00:10 by eflorenz          #+#    #+#             */
+/*   Updated: 2017/08/11 03:00:21 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-void	ft_displayls(t_list *files)
+int		ft_st_sizecmp(void *a, void *b)
 {
-	t_column_sizes	*cs;
+	struct stat		*stat1;
+	struct stat		*stat2;
 
-	cs = ft_get_column_size(files);
-	if (g_toptions[o_l])
-		ft_display_l(files, cs);
-	else if (g_toptions[o_x])
-		ft_display_x(files, cs);
-	else if (g_toptions[o_C])
-		ft_display_c_(files, cs);
-	else if (g_toptions[o_m])
-		ft_display_m(files, cs);
+	stat1 = &((t_file*)a)->stat;
+	stat2 = &((t_file*)b)->stat;
+	if (stat1->st_size < stat2->st_size)
+		return (1);
+	else if (stat1->st_size > stat2->st_size)
+		return (-1);
 	else
-		ft_display_1(files, cs);
+		return (ft_d_namecmp(a, b));
+}
+
+int		ft_st_sizecmp_r(void *a, void *b)
+{
+	return (ft_st_sizecmp(b, a));
 }

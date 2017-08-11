@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display.c                                          :+:      :+:    :+:   */
+/*   colors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:25:07 by eflorenz         ###   ########.fr       */
+/*   Created: 2017/08/10 23:21:54 by eflorenz          #+#    #+#             */
+/*   Updated: 2017/08/11 01:31:50 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef COLORS_H
+# define COLORS_H
 
-void	ft_displayls(t_list *files)
-{
-	t_column_sizes	*cs;
+void	ft_color_name_start(char *str, struct stat *buff_stat);
+void	ft_color_name_end(char *str);
+int		ft_color_index(char c);
+char	*ft_make_color_str(int index);
 
-	cs = ft_get_column_size(files);
-	if (g_toptions[o_l])
-		ft_display_l(files, cs);
-	else if (g_toptions[o_x])
-		ft_display_x(files, cs);
-	else if (g_toptions[o_C])
-		ft_display_c_(files, cs);
-	else if (g_toptions[o_m])
-		ft_display_m(files, cs);
-	else
-		ft_display_1(files, cs);
-}
+#endif

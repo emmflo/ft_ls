@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display.c                                          :+:      :+:    :+:   */
+/*   display_str_name.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:25:07 by eflorenz         ###   ########.fr       */
+/*   Created: 2017/08/11 01:05:07 by eflorenz          #+#    #+#             */
+/*   Updated: 2017/08/11 02:25:28 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef DISPLAY_STR_NAME_H
+# define DISPLAY_STR_NAME_H
 
-void	ft_displayls(t_list *files)
-{
-	t_column_sizes	*cs;
+char	*ft_str_name_(t_list *files);
+char	*ft_str_name(t_list *files, t_column_sizes *cs);
+char	*ft_str_name_q(t_list *files);
+char	*ft_str_name_b(t_list *files);
+int		ft_get_name_size_b(t_list *files);
 
-	cs = ft_get_column_size(files);
-	if (g_toptions[o_l])
-		ft_display_l(files, cs);
-	else if (g_toptions[o_x])
-		ft_display_x(files, cs);
-	else if (g_toptions[o_C])
-		ft_display_c_(files, cs);
-	else if (g_toptions[o_m])
-		ft_display_m(files, cs);
-	else
-		ft_display_1(files, cs);
-}
+#endif

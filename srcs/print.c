@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/17 15:50:08 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/05/10 22:46:00 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/11 02:26:01 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,33 +53,10 @@ char	ft_char_to_escape(unsigned char c)
 	return ('\\');
 }
 
-char	*ft_str_name_q(t_list *files)
+int		ft_get_name_size_b(t_list *files)
 {
 	char	*ptr;
-	char	*str;
-	int		i;
-
-	str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name) + 1);
-	ptr = ((t_file*)files->content)->dirent.d_name;
-	i = 0;
-	while (*ptr != '\0')
-	{
-		if (isgraph(*ptr))
-			str[i++] = *ptr;
-		else
-			str[i++] = '?';
-		ptr++;
-	}
-	str[i] = '\0';
-	return (str);
-}
-
-char	*ft_str_name_b(t_list *files)
-{
 	int		size;
-	char	*ptr;
-	char	*str;
-	int		i;
 
 	size = 0;
 	ptr = ((t_file*)files->content)->dirent.d_name;
@@ -93,28 +70,5 @@ char	*ft_str_name_b(t_list *files)
 			size += 4;
 		ptr++;
 	}
-	str = ft_strnew(size + 1);
-	ptr = ((t_file*)files->content)->dirent.d_name;
-	i = 0;
-	while (*ptr != '\0')
-	{
-		if (isprint(*ptr))
-			str[i++] = *ptr;
-		else if (g_toptions[o_b] && ft_escape(*ptr))
-		{
-			str[i] = '\\';
-			str[i + 1] = ft_char_to_escape(*ptr);
-			i += 2;
-		}
-		else
-		{
-			str[i] = '\\';
-			str[i + 1] = '\0';
-			ft_strcat(str, ft_char_to_oct(*ptr));
-			i += 4;
-		}
-		ptr++;
-	}
-	str[i] = '\0';
-	return (str);
+	return (size);
 }

@@ -17,6 +17,10 @@
 //# define st_mtimespec st_mtim
 
 extern char	*g_toptions;
+extern int	g_columns;
+extern char	*g_colors;
+extern char	g_colors_tab[][6];
+extern char	*g_lscolors;
 
 typedef struct		s_xattr
 {
@@ -49,6 +53,7 @@ typedef struct		s_tab
 {
 	void	**tab;
 	int		tab_len;
+	int		max;
 }					t_tab;
 
 enum			e_options { o_l, o_R, o_a, o_r, o_t , o_A, o_x, o_C, o_1, o_S,
@@ -70,7 +75,6 @@ int				ft_nbrsize(int nb);
 t_column_sizes	*ft_get_column_size(t_list *files);
 void			get_xattr_names(t_file *file);
 void			ft_display_xattrs(t_file *file);
-void			ft_putnbr_fixed(int nb, int column_size, int right);
 void			ft_get_acls(t_file *file);
 void			ft_display_acls(t_file *file);
 char			*ft_str_name_b(t_list *files);
@@ -81,5 +85,28 @@ void			ft_print_error(char *pre, char *error);
 void			ft_print_errno(char *pre);
 long long int	ft_get_total(t_list *files);
 long long int	ft_get_size(t_file *file);
+char			*ft_char_to_oct(unsigned char c);
+int				ft_escape(unsigned char c);
+char			ft_char_to_escape(unsigned char c);
 
+# include "display_utils.h"
+# include "colors.h"
+# include "columns.h"
+# include "sizes.h"
+# include "display_l.h"
+# include "display_print.h"
+# include "display_to_str.h"
+# include "display_x.h"
+# include "display_str_name.h"
+# include "display_1.h"
+# include "display_m.h"
+# include "display_c_.h"
+# include "display_date.h"
+# include "get_color.h"
+# include "get_total.h"
+# include "display_permissions.h"
+# include "ls_sort.h"
+# include "ls_filter.h"
+# include "ls_recursive.h"
+# include "ls_utils.h"
 #endif
