@@ -6,10 +6,11 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:23:16 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:37:57 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 06:12:39 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "ft_ls.h"
 
 t_list	**ft_make_file_tab(t_list *files)
@@ -46,14 +47,17 @@ void	ft_print_c_(int j, t_tab *tab, int nb_lines,
 {
 	char	*str;
 	int		len;
+	char	*name;
 
 	while (j < tab->tab_len)
 	{
 		if (g_toptions[o_i])
 			ft_putino(tab->tab[j], cs);
 		str = ft_str_name(tab->tab[j], cs);
-		len = ft_len_name(tab->tab[j], cs);
+		name = ft_make_name(tab->tab[j]);
+		len = ft_len_name(name, cs);
 		ft_putstr(str);
+		ft_strdel(&name);
 		ft_strdel(&str);
 		if (len % 8 != 0)
 			ft_putchar('\t');
