@@ -20,7 +20,7 @@ extern char	*g_toptions;
 extern int	g_columns;
 extern char	*g_colors;
 extern char	g_colors_tab[][6];
-extern char	*g_lscolors;
+extern char	g_lscolors[22];
 
 typedef struct		s_xattr
 {

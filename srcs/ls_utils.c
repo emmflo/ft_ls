@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 03:21:45 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 05:43:18 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 07:05:17 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,11 @@ char	*ft_newg_toptions(void)
 	return (toptions);
 }
 
-void	ft_deldir(void *str, size_t size)
+void	ft_deldir(void *content, size_t size)
 {
-	str = NULL;
+	char	*str;
+
+	str = content;
+	ft_strdel(&str);
 	(void)size;
 }

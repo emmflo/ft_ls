@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 02:46:30 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 02:48:31 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 09:25:49 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,11 @@ t_list			*ft_makefilelist(char *path, DIR *dir)
 		if (dirent == NULL)
 			break ;
 		if ((file = ft_makefile(path, dirent)) != NULL)
+		{
 			ft_lstconstruct(&files, &ptr, ft_lstnew(file,
 			sizeof(t_file)));
+			free(file);
+		}
 	}
 	return (files);
 }

@@ -47,7 +47,7 @@ DEPS := $(OBJS:.o=.d)
 LIB := -L libft -lft
 CC := clang
 INCDIR := -I./libft/includes -I./includes
-CFLAGS := -Wall -Wextra -Werror $(INCDIR)
+CFLAGS := -O0 -Wall -Wextra -Werror $(INCDIR)
 #CFLAGS := $(INCDIR)
 NAME := ft_ls
 DEBUG := -g

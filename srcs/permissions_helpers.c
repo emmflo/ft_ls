@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:44:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:45:19 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 10:25:46 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,6 @@ void	ft_permission_extra(char *permissions, t_file *file)
 {
 	if (file->xattrs_buffsize > 0)
 		permissions[9] = '@';
-	else if (file->acl != NULL)
+	else if (file->acl != NULL && ft_type_to_char(&(file->stat)) != 'l')
 		permissions[9] = '+';
 }

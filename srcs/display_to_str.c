@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 00:53:57 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:47:34 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 11:01:47 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ char	ft_f__char(struct stat *buff_stat)
 	if ((buff_stat->st_mode & S_IFMT) == S_IFDIR)
 		return ('/');
 	else if ((buff_stat->st_mode & S_IFMT) == S_IFREG &&
-			(buff_stat->st_mode & S_IXUSR) != 0)
+			(((buff_stat->st_mode & S_IXUSR) != 0) ||
+			((buff_stat->st_mode & S_IXGRP) != 0) ||
+			((buff_stat->st_mode & S_IXOTH) != 0)))
 		return ('*');
 	else if ((buff_stat->st_mode & S_IFMT) == S_IFLNK)
 		return ('@');

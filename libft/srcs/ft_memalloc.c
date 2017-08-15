@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 23:07:43 by eflorenz          #+#    #+#             */
-/*   Updated: 2016/11/07 23:07:44 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 07:42:05 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	*ft_memalloc(size_t size)
 
 	if (size == 0)
 		return (NULL);
-	if (!(ptr = (char*)malloc(sizeof(char) * size)))
+	if (!(ptr = (char*)malloc(sizeof(char*) * size)))
 		return (NULL);
 	i = 0;
 	while (i < size)

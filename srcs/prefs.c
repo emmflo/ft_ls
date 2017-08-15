@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:37 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 05:50:51 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 07:45:35 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 int		g_columns = 80;
-char	*g_lscolors;
+char	g_lscolors[22];
 char	g_colors_tab[][6] = {
 	"\x1b[30m", "\x1b[31m", "\x1b[32m", "\x1b[33m", "\x1b[34m",
 	"\x1b[35m", "\x1b[36m", "\x1b[37m", "\x1b[39m",
@@ -42,5 +42,5 @@ void	ft_get_prefs(void)
 		g_toptions[o_v] = 1;
 		g_toptions[o_w] = 1;
 	}
-	g_lscolors = ft_strdup("exfxcxdxbxegedabagacad");
+	ft_strcpy(g_lscolors, "exfxcxdxbxegedabagacad");
 }

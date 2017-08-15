@@ -6,11 +6,18 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 11:28:13 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/08 22:13:00 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 07:22:47 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+/*
+void	ft_delattr(void *content, size_t size)
+{
+	
+}
+*/
 
 void	make_xattr_names(t_file *file, char *attr_names, t_list *attrs,
 		char *path)
@@ -52,6 +59,8 @@ void	get_xattr_names(t_file *file)
 	listxattr(path, attr_names, file->xattrs_buffsize, XATTR_NOFOLLOW);
 	make_xattr_names(file, attr_names, attrs, path);
 	file->xattrs = attrs;
+	ft_strdel(&path);
+	ft_strdel(&attr_names);
 }
 
 void	ft_display_xattrs(t_file *file)

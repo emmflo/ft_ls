@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:25:07 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 07:10:02 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,5 @@ void	ft_displayls(t_list *files)
 		ft_display_m(files, cs);
 	else
 		ft_display_1(files, cs);
+	free(cs);
 }

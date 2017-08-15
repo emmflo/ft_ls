@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 03:08:14 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 03:10:36 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 09:22:14 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	ft_filterlist(t_list **files)
 void	ft_delfile(void *file, size_t size)
 {
 	(void)size;
-	ft_strdel(&(((t_file*)file)->path));
+	if ((((t_file*)file)->path) != NULL)
+		ft_strdel(&(((t_file*)file)->path));
 	free((t_file*)file);
 }
