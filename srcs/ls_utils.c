@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 03:21:45 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 03:29:04 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 05:43:18 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,14 @@ char	*make_path(char *path, char *name)
 
 char	*ft_newg_toptions(void)
 {
+	char	*toptions;
 	int		i;
 
 	i = 0;
-	g_toptions = ft_strnew(NB_OPTIONS);
+	toptions = ft_strnew(NB_OPTIONS);
 	while (i < NB_OPTIONS)
-		g_toptions[i++] = 0;
-	return (g_toptions);
+		toptions[i++] = 0;
+	return (toptions);
 }
 
 void	ft_deldir(void *str, size_t size)

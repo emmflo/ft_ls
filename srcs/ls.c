@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 03:29:03 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 05:34:47 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	ft_files(t_list *dirs)
 void	ft_ls_start(char *options, t_list **dirs)
 {
 	g_toptions = ft_newg_toptions();
-	ft_get_prefs(g_toptions);
+	ft_get_prefs();
 	lsopt(options);
 	ft_strdel(&options);
 	if (*dirs == NULL)

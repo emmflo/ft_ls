@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:37 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/20 11:53:08 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 05:50:51 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	g_colors_tab[][6] = {
 	"\x1b[45m", "\x1b[46m", "\x1b[47m", "\x1b[49m", ""};
 char	*g_colors = "abcdefghxABCDEFGHX ";
 
-void	ft_get_prefs(char *toptions)
+void	ft_get_prefs(void)
 {
 	struct winsize	w;
 
@@ -33,14 +33,14 @@ void	ft_get_prefs(char *toptions)
 		g_columns = 80;
 	if (isatty(1))
 	{
-		toptions[o_q] = 1;
-		toptions[o_C] = 1;
+		g_toptions[o_q] = 1;
+		g_toptions[o_C] = 1;
 	}
 	else
 	{
-		toptions[o_1] = 1;
-		toptions[o_v] = 1;
-		toptions[o_w] = 1;
+		g_toptions[o_1] = 1;
+		g_toptions[o_v] = 1;
+		g_toptions[o_w] = 1;
 	}
 	g_lscolors = ft_strdup("exfxcxdxbxegedabagacad");
 }

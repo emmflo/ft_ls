@@ -6,12 +6,25 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:04:52 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 02:25:04 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 06:01:44 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include <ctype.h>
+
+char	*ft_make_name(t_list *files)
+{
+	char	*name;
+
+	if (g_toptions[o_q])
+		name = ft_str_name_q(files);
+	else if (g_toptions[o_b] || g_toptions[o_B])
+		name = ft_str_name_b(files);
+	else
+		name = ft_str_name_(files);
+	return (name);
+}
 
 char	*ft_str_name_(t_list *files)
 {
@@ -29,24 +42,25 @@ char	*ft_str_name(t_list *files, t_column_sizes *cs)
 	struct stat	*buff_stat;
 
 	buff_stat = &((t_file*)files->content)->stat;
-	str = ft_strnew(ft_len_name(files, cs)
+	name = ft_make_name(files);
+	str = ft_strnew(ft_len_name(name, cs)
 			+ g_toptions[o_F] + g_toptions[o_p] + 20 * g_toptions[o_G]);
 	str[0] = '\0';
 	ft_color_name_start(str, buff_stat);
-	if (g_toptions[o_q])
-		name = ft_str_name_q(files);
-	else if (g_toptions[o_b] || g_toptions[o_B])
-		name = ft_str_name_b(files);
-	else
-		name = ft_str_name_(files);
 	ft_strcat(str, name);
-	free(name);
+	if (name != NULL)
+		ft_strdel(&name);
 	ft_color_name_end(str);
-	str[ft_strlen(str) + 1] = '\0';
 	if (g_toptions[o_F])
+	{
+		str[ft_strlen(str) + 1] = '\0';
 		str[ft_strlen(str)] = ft_f__char(buff_stat);
+	}
 	else if (g_toptions[o_p] && (buff_stat->st_mode & S_IFMT) == S_IFDIR)
+	{
+		str[ft_strlen(str) + 1] = '\0';
 		ft_strcat(str, "/");
+	}
 	return (str);
 }
 
@@ -89,7 +103,7 @@ void	ft_str_name_b_loop(char *ptr, char *str, int *i)
 		str[*i + 1] = '\0';
 		tmp = ft_char_to_oct(*ptr);
 		ft_strcat(str, tmp);
-		free(tmp);
+		ft_strdel(&tmp);
 		*i += 4;
 	}
 }

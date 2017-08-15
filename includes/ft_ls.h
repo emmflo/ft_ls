@@ -62,13 +62,13 @@ enum			e_options { o_l, o_R, o_a, o_r, o_t , o_A, o_x, o_C, o_1, o_S,
 t_list			*ft_merge(t_list *a, t_list *b, int cmp(void *, void *));
 t_list			*ft_merge_sort(t_list *list, int cmp(void *, void *));
 int				ft_lstlen(t_list *list);
-char			*lsopt(char *options);
+void			lsopt(char *options);
 void			opt_error(char option);
 void			ft_ls(char *options, t_list *dirs);
 void			ft_displayls(t_list *files);
 char			*make_path(char *path, char *name);
 int				ft_check_errno(char *pre);
-void			ft_get_prefs(char *toptions);
+void			ft_get_prefs(void);
 void			ft_dir(char *path);
 t_list			*ft_makefilelist(char *path, DIR *dir);
 int				ft_nbrsize(int nb);

@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/10 23:05:02 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:10:58 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 04:54:03 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	ft_putstr_fixed(char *str, int column_size, int right);
 void	ft_putnbr_fixed(int nb, int column_size, int right);
-int		ft_len_name(t_list *files, t_column_sizes *cs);
+int		ft_len_name(char *name, t_column_sizes *cs);
 void	ft_putnchar(char c, int nb);
 int		ft_get_max_len(t_list *files, t_column_sizes *cs);
 

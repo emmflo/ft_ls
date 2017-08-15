@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/10 23:02:51 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:11:00 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/15 04:55:12 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,11 @@ void	ft_putstr_fixed(char *str, int column_size, int right)
 		ft_putstr(str);
 }
 
-int		ft_len_name(t_list *files, t_column_sizes *cs)
+int		ft_len_name(char *name, t_column_sizes *cs)
 {
 	int		len;
 
-	if (g_toptions[o_q])
-		len = ft_strlen(ft_str_name_q(files));
-	else if (g_toptions[o_b] || g_toptions[o_B])
-		len = ft_strlen(ft_str_name_b(files));
-	else
-		len = ft_strlen(((t_file*)files->content)->dirent.d_name);
+	len = ft_strlen(name);
 	if (g_toptions[o_F])
 		len++;
 	if (g_toptions[o_i])
@@ -61,13 +56,16 @@ int		ft_get_max_len(t_list *files, t_column_sizes *cs)
 {
 	int		max;
 	int		tmp;
+	char	*name;
 
 	max = 0;
 	while (files != NULL)
 	{
-		tmp = ft_len_name(files, cs);
+		name = ft_make_name(files);
+		tmp = ft_len_name(name, cs);
 		max = tmp > max ? tmp : max;
 		files = files->next;
+		ft_strdel(&name);
 	}
 	return (max);
 }
