@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:19:10 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 19:03:27 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 19:11:06 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	ft_display_m(t_list *files, t_column_sizes *cs)
 	int		len;
 
 	pos = 0;
+	if (g_toptions[o_s])
+		ft_print_total(files);
 	while (files != NULL)
 	{
 		str = ft_str_name(files, cs);

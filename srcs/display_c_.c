@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:23:16 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 19:03:20 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 19:10:48 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	ft_display_c_(t_list *files, t_column_sizes *cs)
 	int		i;
 	int		nb_lines;
 
+	if (g_toptions[o_s])
+		ft_print_total(files);
 	tab.tab = (void**)ft_make_file_tab(files);
 	tab.tab_len = ft_lstlen(files);
 	tab.max = ft_get_max_len(files, cs);
