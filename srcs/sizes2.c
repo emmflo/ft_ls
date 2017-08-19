@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:48:43 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:49:20 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 18:50:00 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,5 @@ int	ft_get_flags_size(t_file *file)
 
 int	ft_get_s_size(t_file *file)
 {
-	return (ft_nbrsize(ft_get_size(file)));
+	return (ft_nbrsize(file->stat.st_blocks));
 }

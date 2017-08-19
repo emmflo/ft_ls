@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 00:41:14 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 12:20:54 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 19:03:24 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	ft_display_l_file_first_part(t_list *file, t_column_sizes *cs,
 {
 	if (g_toptions[o_i])
 		ft_putino(file, cs);
+	if (g_toptions[o_s])
+		ft_putsize(file, cs);
 	ft_print_perm_and_type(file_content, buff_stat);
 	ft_putstr(" ");
 	ft_putnbr_fixed(buff_stat->st_nlink, cs->nlink, 1);

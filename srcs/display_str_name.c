@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:04:52 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 15:29:57 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 18:00:58 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ char	*ft_make_name(t_list *files)
 {
 	char	*name;
 
-	if (g_toptions[o_q])
+	/*if (g_toptions[o_q])
 		name = ft_str_name_q(files);
 	else if (g_toptions[o_b] || g_toptions[o_B])
 		name = ft_str_name_b(files);
-	else
+	else*/
 		name = ft_str_name_(files);
 	return (name);
 }
@@ -64,7 +64,7 @@ char	*ft_str_name(t_list *files, t_column_sizes *cs)
 	return (str);
 }
 
-char	*ft_str_name_q(t_list *files)
+/*char	*ft_str_name_q(t_list *files)
 {
 	char	*ptr;
 	char	*str;
@@ -124,4 +124,4 @@ char	*ft_str_name_b(t_list *files)
 	}
 	str[i] = '\0';
 	return (str);
-}
+}*/

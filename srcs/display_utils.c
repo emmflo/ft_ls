@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/10 23:02:51 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 15:40:28 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 19:03:30 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int		ft_len_name(char *name, t_column_sizes *cs)
 	len = ft_strlen(name);
 	if (g_toptions[o_i])
 		len += cs->ino + 1;
+	if (g_toptions[o_s])
+		len += cs->s + 1;
 	return (len);
 }
 

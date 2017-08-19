@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:02:02 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/20 11:59:46 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 18:18:21 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	opt_error(char option)
 {
 	ft_putstr_fd("ls: illegal option -- ", 2);
 	ft_putchar_fd(option, 2);
-	ft_putstr_fd("\nusage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]", 2);
+	ft_putstr_fd("\nusage: ls [-@1AaCcdeFfGgHiLlmnOoPpRrSsTtuUx]", 2);
 	ft_putstr_fd(" [file ...]\n", 2);
 	exit(1);
 }

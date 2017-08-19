@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 00:51:44 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 14:16:15 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 18:55:30 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 void	ft_putino(t_list *files, t_column_sizes *cs)
 {
 	ft_putnbr_fixed(((t_file*)files->content)->stat.st_ino, cs->ino, 1);
+	ft_putchar(' ');
+}
+
+void	ft_putsize(t_list *files, t_column_sizes *cs)
+{
+	int		size;
+	
+	size = ((t_file*)files->content)->stat.st_blocks;
+	ft_putnbr_fixed(size, cs->s, 1);
 	ft_putchar(' ');
 }
 

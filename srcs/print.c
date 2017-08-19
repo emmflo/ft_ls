@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/17 15:50:08 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 02:26:01 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 18:00:05 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	ft_char_to_escape(unsigned char c)
 	return ('\\');
 }
 
-int		ft_get_name_size_b(t_list *files)
+/*int		ft_get_name_size_b(t_list *files)
 {
 	char	*ptr;
 	int		size;
@@ -71,4 +71,4 @@ int		ft_get_name_size_b(t_list *files)
 		ptr++;
 	}
 	return (size);
-}
+}*/

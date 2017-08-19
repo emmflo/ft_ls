@@ -13,7 +13,7 @@
 # include <stdio.h> //bite
 # include <sys/acl.h>
 # include <sys/types.h>
-# define NB_OPTIONS 36
+# define NB_OPTIONS 30
 //# define st_mtimespec st_mtim
 
 extern char	*g_toptions;
@@ -56,9 +56,12 @@ typedef struct		s_tab
 	int		max;
 }					t_tab;
 
-enum			e_options { o_l, o_R, o_a, o_r, o_t , o_A, o_x, o_C, o_1, o_S,
+/*enum			e_options { o_l, o_R, o_a, o_r, o_t , o_A, o_x, o_C, o_1, o_S,
    				o_F, o_f, o_g, o_p, o_m, o_o, o_c, o_u, o_U, o_T, o_n, o_i, o_at,
-				o_e, o_b, o_B, o_q, o_v, o_w, o_G, o_d, o_L, o_H, o_P, o_O, o_s };
+				o_e, o_b, o_B, o_q, o_v, o_w, o_G, o_d, o_L, o_H, o_P, o_O, o_s };*/
+enum			e_options { o_at, o_1, o_A, o_a, o_C, o_c, o_d, o_e, o_F, o_f,
+							o_G, o_g, o_H, o_i, o_L, o_l, o_m, o_n, o_O, o_o,
+							o_P, o_p, o_R, o_r, o_S, o_s, o_T, o_t, o_u, o_U, o_x };
 t_list			*ft_merge(t_list *a, t_list *b, int cmp(void *, void *));
 t_list			*ft_merge_sort(t_list *list, int cmp(void *, void *));
 int				ft_lstlen(t_list *list);

@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:28 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 05:34:07 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 17:59:08 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	ft_override_opt_cu_u(char opt)
 	}
 }
 
-void	ft_override_opt_vw_bbq(char opt)
+/*void	ft_override_opt_vw_bbq(char opt)
 {
 	if (opt == 'v' || opt == 'w' || opt == 'B' || opt == 'b' || opt == 'q')
 	{
@@ -47,7 +47,7 @@ void	ft_override_opt_vw_bbq(char opt)
 		g_toptions[o_b] = 0;
 		g_toptions[o_q] = 0;
 	}
-}
+}*/
 
 void	ft_override_opt(char opt)
 {
@@ -57,7 +57,7 @@ void	ft_override_opt(char opt)
 	if (opt == 'g' || opt == 'o')
 		g_toptions[o_l] = 1;
 	ft_override_opt_cu_u(opt);
-	ft_override_opt_vw_bbq(opt);
+	//ft_override_opt_vw_bbq(opt);
 	if (opt == 'n')
 		g_toptions[o_l] = 1;
 	if (opt == 'd')
@@ -73,7 +73,8 @@ void	lsopt(char *options)
 	char	*pos;
 	char	*valid_options;
 
-	valid_options = ft_strdup("lRartAxC1SFfgpmocuUTni@ebBqvwGdLHPOs");
+	//valid_options = ft_strdup("lRartAxC1SFfgpmocuUTni@ebBqvwGdLHPOs");
+	valid_options = ft_strdup("@1AaCcdeFfGgHiLlmnOoPpRrSsTtuUx");
 	while (*options != '\0')
 	{
 		if ((pos = ft_strchr(valid_options, *options)) != NULL)

@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:23:16 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 15:41:10 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 19:03:20 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	ft_print_c_(int j, t_tab *tab, int nb_lines,
 	{
 		if (g_toptions[o_i])
 			ft_putino(tab->tab[j], cs);
+		if (g_toptions[o_s])
+			ft_putsize(tab->tab[j], cs);
 		str = ft_str_name(tab->tab[j], cs);
 		len = ft_len_name(str, cs);
 		ft_putstr(str);
