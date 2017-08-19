@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 03:08:14 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 09:22:14 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 12:13:10 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,9 @@ void	ft_delfile(void *file, size_t size)
 	(void)size;
 	if ((((t_file*)file)->path) != NULL)
 		ft_strdel(&(((t_file*)file)->path));
+	if ((((t_file*)file)->xattrs) != NULL)
+		ft_lstdel(&(((t_file*)file)->xattrs), &ft_delattrs);
+	if ((((t_file*)file)->acl) != NULL)
+		acl_free(((t_file*)file)->acl);
 	free((t_file*)file);
 }

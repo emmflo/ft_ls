@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 02:46:30 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 09:25:49 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 11:34:26 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_file			*ft_makefile_commit(char *path, struct dirent *dirent,
 	file->path = ft_strdup(path);
 	file->dirent = *dirent;
 	file->stat = *buff_stat;
+	file->xattrs = NULL;
+	file->xattrs_buffsize = 0;
 	get_xattr_names(file);
 	ft_get_acls(file);
 	free(buff_stat);

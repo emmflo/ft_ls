@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/14 12:11:51 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 07:20:45 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 12:11:44 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	ft_get_acls(t_file *file)
 	path = make_path(file->path, file->dirent.d_name);
 	acl = acl_get_file(path, ACL_TYPE_EXTENDED);
 	file->acl = acl_dup(acl);
+	acl_free(acl);
 	ft_strdel(&path);
 }
 

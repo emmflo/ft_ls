@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 00:41:14 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:40:06 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 12:20:54 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,17 @@ void	ft_display_l_file_third_part(t_list *file, t_column_sizes *cs,
 		struct stat *buff_stat, t_file *file_content)
 {
 	char		*str;
+	char		*str2;
 
 	ft_display_name(file, cs);
 	if (ft_type_to_char(buff_stat) == 'l')
 	{
 		ft_putstr(" -> ");
 		str = make_path(file_content->path, file_content->dirent.d_name);
-		ft_putstr(link_to_str(str, buff_stat));
+		str2 = link_to_str(str, buff_stat);
+		ft_putstr(str2);
 		free(str);
+		free(str2);
 	}
 	ft_putchar('\n');
 	if (g_toptions[o_at])
