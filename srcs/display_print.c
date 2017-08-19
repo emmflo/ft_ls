@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 00:51:44 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 01:27:28 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 14:16:15 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,14 @@ void	ft_print_group_and_user(struct stat *buff_stat, t_column_sizes *cs)
 		ft_putstr("  ");
 }
 
-void	ft_display_name(t_list *files, t_column_sizes *cs)
+int		ft_display_name(t_list *files, t_column_sizes *cs)
 {
+	int		len;
 	char	*str;
 
 	str = ft_str_name(files, cs);
+	len = ft_strlen(str);
 	ft_putstr(str);
 	ft_strdel(&str);
+	return (len);
 }

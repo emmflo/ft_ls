@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:37 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 07:45:35 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 13:49:06 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	ft_get_prefs(void)
 	}
 	else
 	{
+		g_columns = 80;
 		g_toptions[o_1] = 1;
 		g_toptions[o_v] = 1;
 		g_toptions[o_w] = 1;

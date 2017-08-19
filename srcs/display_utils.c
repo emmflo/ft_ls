@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/10 23:02:51 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 04:55:12 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 15:40:28 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ int		ft_len_name(char *name, t_column_sizes *cs)
 	int		len;
 
 	len = ft_strlen(name);
-	if (g_toptions[o_F])
-		len++;
 	if (g_toptions[o_i])
 		len += cs->ino + 1;
 	return (len);
@@ -61,7 +59,7 @@ int		ft_get_max_len(t_list *files, t_column_sizes *cs)
 	max = 0;
 	while (files != NULL)
 	{
-		name = ft_make_name(files);
+		name = ft_str_name(files, cs);
 		tmp = ft_len_name(name, cs);
 		max = tmp > max ? tmp : max;
 		files = files->next;

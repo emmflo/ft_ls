@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 11:28:13 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 12:31:02 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/08/19 15:16:52 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ void	ft_delattrs(void *content, size_t size)
 {
 	(void)size;
 	free(((t_xattr*)content)->attr);
+	ft_strdel(&(((t_xattr*)content)->name));
 	free((t_xattr*)content);
 }
 
-void	make_xattr_names(t_file *file, char *attr_names, t_list *attrs,
+void	make_xattr_names(t_file *file, char *attr_names, t_list **attrs,
 		char *path)
 {
 	ssize_t	i;
@@ -39,7 +40,7 @@ void	make_xattr_names(t_file *file, char *attr_names, t_list *attrs,
 			return ;
 		getxattr(path, attr->name, attr->attr, attr->size, 0, XATTR_NOFOLLOW);
 		offset = ft_strlen(attr->name) + 1;
-		ft_lstconstruct(&attrs, &ptr, ft_lstnew(attr, sizeof(t_xattr)));
+		ft_lstconstruct(attrs, &ptr, ft_lstnew(attr, sizeof(t_xattr)));
 		free(attr);
 		i += offset;
 	}
@@ -58,7 +59,7 @@ void	get_xattr_names(t_file *file)
 		file->xattrs_buffsize = 0;
 	attr_names = ft_strnew(file->xattrs_buffsize);
 	listxattr(path, attr_names, file->xattrs_buffsize, XATTR_NOFOLLOW);
-	make_xattr_names(file, attr_names, attrs, path);
+	make_xattr_names(file, attr_names, &attrs, path);
 	file->xattrs = attrs;
 	ft_strdel(&attr_names);
 	ft_strdel(&path);
