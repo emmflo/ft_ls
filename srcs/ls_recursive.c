@@ -48,11 +48,11 @@ void	ft_manage_ptr_start(char *path, t_list *visited, t_list *ptr,
 	ino_t			*tmp;
 
 	stat(path, &buff_stat);
-	if (!(tmp = malloc(sizeof(ino_t))))
-		return ;
+	check_malloc(tmp = malloc(sizeof(ino_t)));
 	*tmp = buff_stat.st_ino;
 	prev = ptr;
-	ft_lstconstruct(&visited, &ptr, ft_lstnew(tmp, sizeof(ino_t)));
+	ft_lstconstruct(&visited, &ptr, 
+		check_malloc(ft_lstnew(tmp, sizeof(ino_t))));
 }
 
 void	ft_recursive(t_list *files, char *path)

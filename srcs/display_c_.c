@@ -20,8 +20,7 @@ t_list	**ft_make_file_tab(t_list *files)
 	int		i;
 
 	len = ft_lstlen(files);
-	if (!(tab = malloc(sizeof(t_list*) * len)))
-		exit(1);
+	check_malloc(tab = malloc(sizeof(t_list*) * len));
 	i = 0;
 	while (files != NULL)
 	{

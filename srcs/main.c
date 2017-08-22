@@ -16,7 +16,7 @@ char	*ft_realloc(char *str, int size)
 {
 	char	*new;
 
-	new = ft_strnew(size);
+	check_malloc(new = ft_strnew(size));
 	ft_strcpy(new, str);
 	free(str);
 	return (new);
@@ -28,7 +28,7 @@ char	*get_options(int argc, char *argv[], int *i)
 	int		buff_size;
 
 	buff_size = 100;
-	options = ft_strnew(buff_size);
+	check_malloc(options = ft_strnew(buff_size));
 	options[0] = '\0';
 	while (*i < argc && argv[*i][0] == '-')
 	{
@@ -59,7 +59,8 @@ int		main(int argc, char *argv[])
 	while (i < argc)
 	{
 		str = ft_strdup(argv[i]);
-		ft_lstconstruct(&dirs, &ptr, ft_lstnew(str, ft_strlen(str) + 1));
+		ft_lstconstruct(&dirs, &ptr, 
+			check_malloc(ft_lstnew(str, ft_strlen(str) + 1)));
 		ft_strdel(&str);
 		i++;
 	}

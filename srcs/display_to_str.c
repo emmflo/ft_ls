@@ -59,7 +59,7 @@ char	*link_to_str(char *path, struct stat *buff_stat)
 	int				ret;
 
 	size = buff_stat->st_size;
-	str = ft_strnew(size);
+	check_malloc(str = ft_strnew(size));
 	ret = readlink(path, str, size);
 	if (ret == -1)
 	{

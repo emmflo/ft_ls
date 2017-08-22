@@ -12,6 +12,16 @@
 
 #include "ft_ls.h"
 
+void	*check_malloc(void *ptr)
+{
+	if (!ptr)
+	{
+		ft_putstr_fd("ls: malloc error\n", 2);
+		exit(1);
+	}
+	return (ptr);
+}
+
 void	opt_error(char option)
 {
 	ft_putstr_fd("ls: illegal option -- ", 2);

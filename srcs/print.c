@@ -17,7 +17,7 @@ char	*ft_char_to_oct(unsigned char c)
 {
 	char	*str;
 
-	str = ft_strnew(3);
+	check_malloc(str = ft_strnew(3));
 	str[2] = c % 8 + '0';
 	str[1] = (c / 8) % 8 + '0';
 	str[0] = (c / 64) % 8 + '0';

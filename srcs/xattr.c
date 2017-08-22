@@ -32,15 +32,14 @@ void	make_xattr_names(t_file *file, char *attr_names, t_list **attrs,
 	ptr = NULL;
 	while (i < file->xattrs_buffsize)
 	{
-		if (!(attr = malloc(sizeof(t_xattr))))
-			return ;
+		check_malloc(attr = malloc(sizeof(t_xattr)));
 		attr->name = ft_strdup(&attr_names[i]);
 		attr->size = getxattr(path, attr->name, NULL, 0, 0, XATTR_NOFOLLOW);
-		if (!(attr->attr = malloc(attr->size)))
-			return ;
+		check_malloc(attr->attr = malloc(attr->size));
 		getxattr(path, attr->name, attr->attr, attr->size, 0, XATTR_NOFOLLOW);
 		offset = ft_strlen(attr->name) + 1;
-		ft_lstconstruct(attrs, &ptr, ft_lstnew(attr, sizeof(t_xattr)));
+		ft_lstconstruct(attrs, &ptr, 
+			check_malloc(ft_lstnew(attr, sizeof(t_xattr))));
 		free(attr);
 		i += offset;
 	}
@@ -57,7 +56,7 @@ void	get_xattr_names(t_file *file)
 	file->xattrs_buffsize = listxattr(path, NULL, 0, XATTR_NOFOLLOW);
 	if (file->xattrs_buffsize <= 0)
 		file->xattrs_buffsize = 0;
-	attr_names = ft_strnew(file->xattrs_buffsize);
+	check_malloc(attr_names = ft_strnew(file->xattrs_buffsize));
 	listxattr(path, attr_names, file->xattrs_buffsize, XATTR_NOFOLLOW);
 	make_xattr_names(file, attr_names, &attrs, path);
 	file->xattrs = attrs;

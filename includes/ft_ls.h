@@ -92,6 +92,7 @@ char			*ft_char_to_oct(unsigned char c);
 int				ft_escape(unsigned char c);
 char			ft_char_to_escape(unsigned char c);
 void			ft_delattrs(void *content, size_t size);
+void			*check_malloc(void *ptr);
 
 # include "display_utils.h"
 # include "colors.h"

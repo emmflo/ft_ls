@@ -42,7 +42,7 @@ char	*ft_itoa(int nb)
 	int		neg;
 
 	len = ft_nbrsize(nb);
-	str = ft_strnew(len);
+	check_malloc(str = ft_strnew(len));
 	neg = 0;
 	if (nb == 0)
 		return (ft_strcpy(str, "0"));

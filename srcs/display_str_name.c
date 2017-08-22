@@ -30,7 +30,8 @@ char	*ft_str_name_(t_list *files)
 {
 	char	*name;
 
-	name = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name));
+	check_malloc(name = ft_strnew(
+		ft_strlen(((t_file*)files->content)->dirent.d_name)));
 	ft_strcpy(name, ((t_file*)files->content)->dirent.d_name);
 	return (name);
 }
@@ -43,8 +44,8 @@ char	*ft_str_name(t_list *files, t_column_sizes *cs)
 
 	buff_stat = &((t_file*)files->content)->stat;
 	name = ft_make_name(files);
-	str = ft_strnew(ft_len_name(name, cs)
-			+ g_toptions[o_F] + g_toptions[o_p] + 20 * g_toptions[o_G]);
+	check_malloc(str = ft_strnew(ft_len_name(name, cs)
+			+ g_toptions[o_F] + g_toptions[o_p] + 20 * g_toptions[o_G]));
 	str[0] = '\0';
 	ft_color_name_start(str, buff_stat);
 	ft_strcat(str, name);

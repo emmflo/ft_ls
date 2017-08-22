@@ -47,7 +47,7 @@ char	*ft_make_color_str(int index)
 {
 	char	*str;
 
-	str = ft_strnew(10);
+	check_malloc(str = ft_strnew(10));
 	ft_strcat(str, g_colors_tab[ft_color_index(g_lscolors[index * 2])]);
 	ft_strcat(str, g_colors_tab[ft_color_index(ft_toupper(
 					g_lscolors[index * 2 + 1]))]);

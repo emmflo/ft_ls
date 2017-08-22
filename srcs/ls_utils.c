@@ -22,7 +22,7 @@ char	*make_path(char *path, char *name)
 	path_len = ft_strlen(path);
 	if (path_len > 0 && path[path_len - 1] != '/')
 		offset = 1;
-	str = ft_strnew(path_len + ft_strlen(name) + offset);
+	check_malloc(str = ft_strnew(path_len + ft_strlen(name) + offset));
 	ft_strcat(str, path);
 	if (offset)
 		ft_strcat(str, "/");
@@ -36,7 +36,7 @@ char	*ft_newg_toptions(void)
 	int		i;
 
 	i = 0;
-	toptions = ft_strnew(NB_OPTIONS);
+	check_malloc(toptions = ft_strnew(NB_OPTIONS));
 	while (i < NB_OPTIONS)
 		toptions[i++] = 0;
 	return (toptions);

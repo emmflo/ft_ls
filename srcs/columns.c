@@ -21,8 +21,7 @@ t_column_sizes	*ft_new_column_sizes(void)
 {
 	t_column_sizes	*column_sizes;
 
-	if (!(column_sizes = (t_column_sizes*)malloc(sizeof(t_column_sizes))))
-		exit(1);
+	check_malloc(column_sizes = (t_column_sizes*)malloc(sizeof(t_column_sizes)));
 	column_sizes->nlink = 0;
 	column_sizes->size = 0;
 	column_sizes->user = 0;

@@ -20,7 +20,8 @@ void	ft_dir(char *path)
 	errno = 0;
 	dir = opendir(path);
 	if (errno == ENOTDIR)
-		files = ft_lstnew(ft_makefile(path, NULL), sizeof(t_file));
+		check_malloc(files = ft_lstnew(
+			ft_makefile(path, NULL), sizeof(t_file)));
 	else if (ft_check_errno(path))
 		return ;
 	else
@@ -61,7 +62,7 @@ void	ft_files(t_list *dirs)
 		if ((stat.st_mode & S_IFMT) != S_IFDIR)
 		{
 			ft_lstconstruct(&files, &ptr,
-					ft_lstnew(dirs->content, sizeof(dirs->content)));
+				check_malloc(ft_lstnew(dirs->content, sizeof(dirs->content))));
 		}
 		dirs = dirs->next;
 	}
@@ -81,7 +82,7 @@ void	ft_ls_start(char *options, t_list **dirs)
 	if (*dirs == NULL)
 	{
 		str = ft_strdup(".");
-		*dirs = ft_lstnew(str, (ft_strlen(str) + 1) * sizeof(char*));
+		check_malloc(*dirs = ft_lstnew(str, (ft_strlen(str) + 1) * sizeof(char*)));
 		ft_strdel(&str);
 	}
 }

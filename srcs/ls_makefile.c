@@ -16,8 +16,7 @@ struct dirent	*ft_makedirent(char *path)
 {
 	struct dirent	*dirent;
 
-	if (!(dirent = malloc(sizeof(struct dirent))))
-		return (NULL);
+	check_malloc(dirent = malloc(sizeof(struct dirent)));
 	ft_strcpy(dirent->d_name, path);
 	return (dirent);
 }
@@ -27,7 +26,7 @@ t_file			*ft_makefile_commit(char *path, struct dirent *dirent,
 {
 	t_file		*file;
 
-	file = malloc(sizeof(*file));
+	check_malloc(file = malloc(sizeof(*file)));
 	file->path = ft_strdup(path);
 	file->dirent = *dirent;
 	file->stat = *buff_stat;
@@ -49,8 +48,7 @@ t_file			*ft_makefile(char *path, struct dirent *dirent)
 		dirent = ft_makedirent(path);
 		path = "";
 	}
-	if (!(buff_stat = malloc(sizeof(struct stat))))
-		return (NULL);
+	check_malloc(buff_stat = malloc(sizeof(struct stat)));
 	str = make_path(path, dirent->d_name);
 	errno = 0;
 	if (g_toptions[o_L])
@@ -79,8 +77,8 @@ t_list			*ft_makefilelist(char *path, DIR *dir)
 			break ;
 		if ((file = ft_makefile(path, dirent)) != NULL)
 		{
-			ft_lstconstruct(&files, &ptr, ft_lstnew(file,
-			sizeof(t_file)));
+			ft_lstconstruct(&files, &ptr, 
+				check_malloc(ft_lstnew(file, sizeof(t_file)));
 			free(file);
 		}
 	}
@@ -99,8 +97,8 @@ t_list			*ft_makefilelist_d(t_list *dirs)
 	{
 		if ((file = ft_makefile(dirs->content, NULL)) != NULL)
 		{
-			ft_lstconstruct(&files, &ptr, ft_lstnew(file,
-			sizeof(t_file)));
+			ft_lstconstruct(&files, &ptr, 
+				check_malloc(ft_lstnew(file, sizeof(t_file)));
 		}
 		dirs = dirs->next;
 	}

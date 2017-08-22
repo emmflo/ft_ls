@@ -17,7 +17,7 @@ char	*ft_init_permission_str(void)
 	char	*permissions;
 	int		i;
 
-	permissions = ft_strnew(10);
+	check_malloc(permissions = ft_strnew(10));
 	i = 0;
 	while (i < 9)
 		permissions[i++] = '-';
