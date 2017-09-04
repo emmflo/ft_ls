@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 03:16:39 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/11 03:16:46 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:34:13 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	ft_manage_ptr_start(char *path, t_list *visited, t_list *ptr,
 	check_malloc(tmp = malloc(sizeof(ino_t)));
 	*tmp = buff_stat.st_ino;
 	prev = ptr;
-	ft_lstconstruct(&visited, &ptr, 
+	ft_lstconstruct(&visited, &ptr,
 		check_malloc(ft_lstnew(tmp, sizeof(ino_t))));
 }
 

@@ -6,12 +6,12 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:28 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 17:59:08 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 20:41:43 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-#include <stdio.h>
+#include <sys/ioctl.h>
 
 char	*g_toptions;
 
@@ -23,7 +23,6 @@ void	ft_override_opt_1_cxlm(char opt)
 		g_toptions[o_C] = 0;
 		g_toptions[o_x] = 0;
 		g_toptions[o_l] = 0;
-		g_toptions[o_m] = 0;
 	}
 }
 
@@ -37,18 +36,6 @@ void	ft_override_opt_cu_u(char opt)
 	}
 }
 
-/*void	ft_override_opt_vw_bbq(char opt)
-{
-	if (opt == 'v' || opt == 'w' || opt == 'B' || opt == 'b' || opt == 'q')
-	{
-		g_toptions[o_v] = 0;
-		g_toptions[o_w] = 0;
-		g_toptions[o_B] = 0;
-		g_toptions[o_b] = 0;
-		g_toptions[o_q] = 0;
-	}
-}*/
-
 void	ft_override_opt(char opt)
 {
 	ft_override_opt_1_cxlm(opt);
@@ -57,7 +44,6 @@ void	ft_override_opt(char opt)
 	if (opt == 'g' || opt == 'o')
 		g_toptions[o_l] = 1;
 	ft_override_opt_cu_u(opt);
-	//ft_override_opt_vw_bbq(opt);
 	if (opt == 'n')
 		g_toptions[o_l] = 1;
 	if (opt == 'd')
@@ -68,12 +54,19 @@ void	ft_override_opt(char opt)
 		g_toptions[o_L] = 0;
 }
 
+void	ft_cancel_opt(char opt)
+{
+	if (opt == 'G' && !isatty(1))
+		g_toptions[o_G] = 0;
+	if (opt == 'C' && g_toptions[o_m])
+		g_toptions[o_C] = 0;
+}
+
 void	lsopt(char *options)
 {
 	char	*pos;
 	char	*valid_options;
 
-	//valid_options = ft_strdup("lRartAxC1SFfgpmocuUTni@ebBqvwGdLHPOs");
 	valid_options = ft_strdup("@1AaCcdeFfGgHiLlmnOoPpRrSsTtuUx");
 	while (*options != '\0')
 	{
@@ -81,6 +74,7 @@ void	lsopt(char *options)
 		{
 			ft_override_opt(*pos);
 			g_toptions[pos - valid_options] = 1;
+			ft_cancel_opt(*pos);
 		}
 		else
 			opt_error(*options);

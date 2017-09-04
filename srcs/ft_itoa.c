@@ -6,10 +6,11 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/10 23:00:33 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/10 23:01:26 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:22:48 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_ls.h"
 #include "libft.h"
 
 int		ft_nbrsize(int nb)

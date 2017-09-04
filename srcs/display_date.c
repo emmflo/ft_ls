@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:27:34 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 13:01:52 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:24:04 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	print_date_t(long t)
 	str[ft_strlen(str) - 1] = '\0';
 	ft_putstr(str + 4);
 	ft_putchar(' ');
-	//ft_strdel(&str);
 }
 
 void	print_date_(long t)
@@ -46,7 +45,6 @@ void	print_date_(long t)
 		ft_putstr(str + 20);
 	}
 	ft_putchar(' ');
-	//ft_strdel(&str);
 }
 
 void	print_date(struct stat *buff_stat)

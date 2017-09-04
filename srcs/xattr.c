@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 11:28:13 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 15:16:52 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:32:32 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	make_xattr_names(t_file *file, char *attr_names, t_list **attrs,
 		check_malloc(attr->attr = malloc(attr->size));
 		getxattr(path, attr->name, attr->attr, attr->size, 0, XATTR_NOFOLLOW);
 		offset = ft_strlen(attr->name) + 1;
-		ft_lstconstruct(attrs, &ptr, 
+		ft_lstconstruct(attrs, &ptr,
 			check_malloc(ft_lstnew(attr, sizeof(t_xattr))));
 		free(attr);
 		i += offset;

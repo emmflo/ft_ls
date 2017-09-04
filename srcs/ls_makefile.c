@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 02:46:30 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 11:34:26 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:49:35 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ t_list			*ft_makefilelist(char *path, DIR *dir)
 			break ;
 		if ((file = ft_makefile(path, dirent)) != NULL)
 		{
-			ft_lstconstruct(&files, &ptr, 
-				check_malloc(ft_lstnew(file, sizeof(t_file)));
+			ft_lstconstruct(&files, &ptr,
+				check_malloc(ft_lstnew(file, sizeof(t_file))));
 			free(file);
 		}
 	}
@@ -97,8 +97,8 @@ t_list			*ft_makefilelist_d(t_list *dirs)
 	{
 		if ((file = ft_makefile(dirs->content, NULL)) != NULL)
 		{
-			ft_lstconstruct(&files, &ptr, 
-				check_malloc(ft_lstnew(file, sizeof(t_file)));
+			ft_lstconstruct(&files, &ptr,
+				check_malloc(ft_lstnew(file, sizeof(t_file))));
 		}
 		dirs = dirs->next;
 	}

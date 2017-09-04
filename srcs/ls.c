@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 13:53:58 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 07:38:59 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:45:45 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ void	ft_ls_start(char *options, t_list **dirs)
 	if (*dirs == NULL)
 	{
 		str = ft_strdup(".");
-		check_malloc(*dirs = ft_lstnew(str, (ft_strlen(str) + 1) * sizeof(char*)));
+		check_malloc(*dirs =
+				ft_lstnew(str, (ft_strlen(str) + 1) * sizeof(char*)));
 		ft_strdel(&str);
 	}
 }

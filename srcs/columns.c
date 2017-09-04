@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 00:30:47 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 18:50:30 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:49:55 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ t_column_sizes	*ft_new_column_sizes(void)
 {
 	t_column_sizes	*column_sizes;
 
-	check_malloc(column_sizes = (t_column_sizes*)malloc(sizeof(t_column_sizes)));
+	check_malloc(column_sizes =
+			(t_column_sizes*)malloc(sizeof(t_column_sizes)));
 	column_sizes->nlink = 0;
 	column_sizes->size = 0;
 	column_sizes->user = 0;

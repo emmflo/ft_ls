@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:04:52 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 18:00:58 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:30:02 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,7 @@ char	*ft_make_name(t_list *files)
 {
 	char	*name;
 
-	/*if (g_toptions[o_q])
-		name = ft_str_name_q(files);
-	else if (g_toptions[o_b] || g_toptions[o_B])
-		name = ft_str_name_b(files);
-	else*/
-		name = ft_str_name_(files);
+	name = ft_str_name_(files);
 	return (name);
 }
 
@@ -64,65 +59,3 @@ char	*ft_str_name(t_list *files, t_column_sizes *cs)
 	}
 	return (str);
 }
-
-/*char	*ft_str_name_q(t_list *files)
-{
-	char	*ptr;
-	char	*str;
-	int		i;
-
-	str = ft_strnew(ft_strlen(((t_file*)files->content)->dirent.d_name) + 1);
-	ptr = ((t_file*)files->content)->dirent.d_name;
-	i = 0;
-	while (*ptr != '\0')
-	{
-		if (isgraph(*ptr))
-			str[i++] = *ptr;
-		else
-			str[i++] = '?';
-		ptr++;
-	}
-	str[i] = '\0';
-	return (str);
-}
-
-void	ft_str_name_b_loop(char *ptr, char *str, int *i)
-{
-	char	*tmp;
-
-	if (isprint(*ptr))
-		str[(*i)++] = *ptr;
-	else if (g_toptions[o_b] && ft_escape(*ptr))
-	{
-		str[*i] = '\\';
-		str[*i + 1] = ft_char_to_escape(*ptr);
-		*i += 2;
-	}
-	else
-	{
-		str[*i] = '\\';
-		str[*i + 1] = '\0';
-		tmp = ft_char_to_oct(*ptr);
-		ft_strcat(str, tmp);
-		ft_strdel(&tmp);
-		*i += 4;
-	}
-}
-
-char	*ft_str_name_b(t_list *files)
-{
-	char	*ptr;
-	char	*str;
-	int		i;
-
-	str = ft_strnew(ft_get_name_size_b(files) + 1);
-	ptr = ((t_file*)files->content)->dirent.d_name;
-	i = 0;
-	while (*ptr != '\0')
-	{
-		ft_str_name_b_loop(ptr, str, &i);
-		ptr++;
-	}
-	str[i] = '\0';
-	return (str);
-}*/

@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 00:41:14 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 19:12:02 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 20:43:07 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,8 @@ void	ft_print_total(t_list *files)
 
 void	ft_display_l(t_list *files, t_column_sizes *cs)
 {
-	if (g_toptions[o_s])
-		ft_print_total(files);
-	if (!g_toptions[o_d] && files != NULL)
+	if ((g_toptions[o_s] && !g_toptions[o_d]) ||
+		(!g_toptions[o_d] && files != NULL))
 		ft_print_total(files);
 	while (files != NULL)
 	{

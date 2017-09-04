@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/17 15:50:08 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 18:00:05 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:32:52 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,3 @@ char	ft_char_to_escape(unsigned char c)
 		return ('v');
 	return ('\\');
 }
-
-/*int		ft_get_name_size_b(t_list *files)
-{
-	char	*ptr;
-	int		size;
-
-	size = 0;
-	ptr = ((t_file*)files->content)->dirent.d_name;
-	while (*ptr != '\0')
-	{
-		if (isprint(*ptr))
-			size++;
-		else if (g_toptions[o_b] && ft_escape(*ptr))
-			size += 2;
-		else
-			size += 4;
-		ptr++;
-	}
-	return (size);
-}*/

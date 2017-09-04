@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 19:27:37 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 17:59:34 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 19:59:34 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,11 @@ void	ft_get_prefs(void)
 	if (g_columns <= 0)
 		g_columns = 80;
 	if (isatty(1))
-	{
-		//g_toptions[o_q] = 1;
 		g_toptions[o_C] = 1;
-	}
 	else
 	{
 		g_columns = 80;
 		g_toptions[o_1] = 1;
-		/*g_toptions[o_v] = 1;
-		g_toptions[o_w] = 1;*/
 	}
 	ft_strcpy(g_lscolors, "exfxcxdxbxegedabagacad");
 }

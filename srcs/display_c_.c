@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:23:16 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 19:10:48 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 20:35:59 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int		ft_get_nb_lines_c_(int max, int tab_len)
 void	ft_print_c_(int j, t_tab *tab, int nb_lines,
 		t_column_sizes *cs)
 {
-	char	*str;
 	int		len;
 
 	while (j < tab->tab_len)
@@ -53,10 +52,7 @@ void	ft_print_c_(int j, t_tab *tab, int nb_lines,
 			ft_putino(tab->tab[j], cs);
 		if (g_toptions[o_s])
 			ft_putsize(tab->tab[j], cs);
-		str = ft_str_name(tab->tab[j], cs);
-		len = ft_len_name(str, cs);
-		ft_putstr(str);
-		ft_strdel(&str);
+		len = ft_display_name(tab->tab[j], cs);
 		if (j + nb_lines < tab->tab_len)
 		{
 			if (len % 8 != 0)
@@ -74,7 +70,7 @@ void	ft_display_c_(t_list *files, t_column_sizes *cs)
 	int		i;
 	int		nb_lines;
 
-	if (g_toptions[o_s])
+	if (g_toptions[o_s] && !g_toptions[o_d])
 		ft_print_total(files);
 	tab.tab = (void**)ft_make_file_tab(files);
 	tab.tab_len = ft_lstlen(files);

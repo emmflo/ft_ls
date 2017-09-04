@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:02:06 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/19 19:04:55 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 20:52:50 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	ft_print_x(t_list *files, t_column_sizes *cs, int max, int nb_columns)
 {
 	int		i;
 	int		len;
-	char	*str;
 
 	i = 0;
 	while (files != NULL)
@@ -25,10 +24,7 @@ void	ft_print_x(t_list *files, t_column_sizes *cs, int max, int nb_columns)
 			ft_putino(files, cs);
 		if (g_toptions[o_s])
 			ft_putsize(files, cs);
-		str = ft_str_name(files, cs);
-		len = ft_len_name(str, cs);
-		ft_putstr(str);
-		ft_strdel(&str);
+		len = ft_display_name(files, cs);
 		if (i++ % nb_columns == nb_columns - 1)
 			ft_putchar('\n');
 		else if (files->next != NULL)
@@ -48,6 +44,8 @@ void	ft_display_x(t_list *files, t_column_sizes *cs)
 	int		max;
 	int		nb_columns;
 
+	if (g_toptions[o_s] && !g_toptions[o_d])
+		ft_print_total(files);
 	max = ft_get_max_len(files, cs);
 	max = max + (8 - max % 8);
 	nb_columns = g_columns / max;

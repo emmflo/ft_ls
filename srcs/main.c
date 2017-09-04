@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 18:19:23 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/04/20 12:37:06 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:33:59 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int		main(int argc, char *argv[])
 	while (i < argc)
 	{
 		str = ft_strdup(argv[i]);
-		ft_lstconstruct(&dirs, &ptr, 
+		ft_lstconstruct(&dirs, &ptr,
 			check_malloc(ft_lstnew(str, ft_strlen(str) + 1)));
 		ft_strdel(&str);
 		i++;
