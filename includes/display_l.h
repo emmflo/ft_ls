@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 00:43:14 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/09/02 16:18:40 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 22:38:35 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,5 @@ void	ft_display_l_file_third_part(t_list *file, t_column_sizes *cs,
 		struct stat *buff_stat, t_file *file_content);
 void	ft_display_l_file(t_list *file, t_column_sizes *cs);
 void	ft_display_l(t_list *files, t_column_sizes *cs);
-void	ft_print_total(t_list *files);
 
 #endif

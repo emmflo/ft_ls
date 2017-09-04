@@ -6,7 +6,7 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:19:10 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/09/04 20:50:16 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 22:36:40 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,6 @@ void	ft_display_m(t_list *files, t_column_sizes *cs)
 		ft_putstr(str);
 		free(str);
 		files = files->next;
-		if (files != NULL)
-			ft_putstr(", ");
-		else
-			ft_putchar('\n');
+		ft_putstr(files != NULL ? ", " : "\n");
 	}
 }
