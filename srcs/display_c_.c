@@ -6,11 +6,10 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 01:23:16 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/09/04 20:35:59 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 22:52:58 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "ft_ls.h"
 
 t_list	**ft_make_file_tab(t_list *files)

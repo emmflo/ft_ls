@@ -6,13 +6,11 @@
 /*   By: eflorenz <eflorenz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 10:58:29 by eflorenz          #+#    #+#             */
-/*   Updated: 2017/08/15 07:10:02 by eflorenz         ###   ########.fr       */
+/*   Updated: 2017/09/04 22:53:10 by eflorenz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 void	ft_displayls(t_list *files)
 {
